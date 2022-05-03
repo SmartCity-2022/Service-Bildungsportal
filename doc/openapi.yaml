@@ -1,0 +1,1016 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  title: Bildungsportal
+tags:
+  - name: "institution"
+    description: "Access to Institutions"
+  - name: "location"
+    description: "Access to Locations"
+  - name: "student"
+    description: "Access to Students"
+  - name: "education"
+    description: "Access to Educations"
+  - name: "qualification"
+    description: "Access to Qualifications"
+  - name: "matriculation"
+    description: "Access to Matriculations"
+  - name: "assessment"
+    description: "Access to Assessments"
+  - name: "graduation"
+    description: "Access to Graduations"
+  - name: "grade"
+    description: "Access to Grades"
+  - name: "requirement"
+    description: "Access to Requirements"
+paths:
+  /institution:
+    get:
+      summary: "Returns all available institution"
+      operationId: "allInstitutions"
+      tags:
+        - institution
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Institution'
+    post:
+      summary: "Creates a new institution"
+      operationId: "createInstitution"
+      tags:
+        - institution
+      requestBody:
+        description: "New institution to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Institution'
+      responses:
+        "201":
+          description: "Institution created"
+    put:
+      summary: "Updates an institution"
+      operationId: "updateInstitution"
+      tags:
+        - institution
+      requestBody:
+        description: "New institution to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Institution'
+      responses:
+        "200":
+          description: "Institution updated"
+        "404":
+          description: "Institution not found"
+  /institution/{id}:
+    get:
+      summary: "Returns specific institution"
+      operationId: "singleInstitution"
+      tags:
+        - institution
+      parameters:
+        - in: path
+          name: id
+          description: "Id of institution"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Institution'
+  /institution/{id}/location:
+    get:
+      summary: "Returns all location of specific institution"
+      operationId: "allLocationsOfInstitution"
+      tags:
+        - location
+      parameters:
+        - in: path
+          name: id
+          description: "Id of institution"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Location'
+    post:
+      summary: "Creates a new location for specific institution"
+      operationId: "createLocationOfInstitution"
+      tags:
+        - location
+      parameters:
+        - in: path
+          name: id
+          description: "Id of institution"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New location to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        "201":
+          description: "Location created"
+    put:
+      summary: "Updates an location for specific institution"
+      operationId: "updateLocationOfInstitution"
+      tags:
+        - location
+      parameters:
+        - in: path
+          name: id
+          description: "Id of institution"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New location to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        "200":
+          description: "Location updated"
+        "404":
+          description: "Location not found"
+  /student:
+    get:
+      summary: "Returns all available student"
+      operationId: "allStudents"
+      tags:
+        - student
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Student'
+    post:
+      summary: "Creates a new student"
+      operationId: "createStudent"
+      tags:
+        - student
+      requestBody:
+        description: "New student to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        "201":
+          description: "Student created"
+    put:
+      summary: "Updates an student"
+      operationId: "updateStudent"
+      tags:
+        - student
+      requestBody:
+        description: "New student to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        "200":
+          description: "Student updated"
+        "404":
+          description: "Student not found"
+  /student/{id}:
+    get:
+      summary: "Returns specific student"
+      operationId: "singleStudent"
+      tags:
+        - student
+      parameters:
+        - in: path
+          name: id
+          description: "Id of student"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+  /location/{id}/education:
+    get:
+      summary: "Returns all education of specific location"
+      operationId: "allEducationsOfLocation"
+      tags:
+        - education
+      parameters:
+        - in: path
+          name: id
+          description: "Id of location"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Education'
+    post:
+      summary: "Creates a new education for specific education"
+      operationId: "createEducationOfLocation"
+      tags:
+        - education
+      parameters:
+        - in: path
+          name: id
+          description: "Id of location"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New education to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Education'
+      responses:
+        "201":
+          description: "Education created"
+    put:
+      summary: "Updates an education for specific location"
+      operationId: "updateEducationOfLocation"
+      tags:
+        - education
+      parameters:
+        - in: path
+          name: id
+          description: "Id of location"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New education to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Education'
+      responses:
+        "200":
+          description: "Education updated"
+        "404":
+          description: "Education not found"
+  /qualification:
+    get:
+      summary: "Returns all available qualification"
+      operationId: "allQualifications"
+      tags:
+        - qualification
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Qualification'
+    post:
+      summary: "Creates a new qualification"
+      operationId: "createQualification"
+      tags:
+        - qualification
+      requestBody:
+        description: "New qualification to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Qualification'
+      responses:
+        "201":
+          description: "Qualification created"
+    put:
+      summary: "Updates an qualification"
+      operationId: "updateQualification"
+      tags:
+        - qualification
+      requestBody:
+        description: "New qualification to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Qualification'
+      responses:
+        "200":
+          description: "Qualification updated"
+        "404":
+          description: "Qualification not found"
+  /qualification/{id}:
+    get:
+      summary: "Returns specific qualification"
+      operationId: "singleQualification"
+      tags:
+        - qualification
+      parameters:
+        - in: path
+          name: id
+          description: "Id of qualification"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Qualification'
+  /student/{id}/matriculation:
+    get:
+      summary: "Returns all matriculation of specific student"
+      operationId: "allMatriculationsOfStudent"
+      tags:
+        - matriculation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of student"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Matriculation'
+    post:
+      summary: "Creates a new matriculation for specific student"
+      operationId: "createMatriculationOfStudent"
+      tags:
+        - matriculation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of student"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New matriculation to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Matriculation'
+      responses:
+        "201":
+          description: "Matriculation created"
+    put:
+      summary: "Updates an matriculation for specific student"
+      operationId: "updateMatriculationOfStudent"
+      tags:
+        - matriculation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of student"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New matriculation to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Matriculation'
+      responses:
+        "200":
+          description: "Matriculation updated"
+        "404":
+          description: "Matriculation not found"
+  /education/{id}/matriculation:
+    get:
+      summary: "Returns all matriculation of specific education"
+      operationId: "allMatriculationsOfEducation"
+      tags:
+        - matriculation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Matriculation'
+    post:
+      summary: "Creates a new matriculation for specific education"
+      operationId: "createMatriculationOfEducation"
+      tags:
+        - matriculation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New matriculation to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Matriculation'
+      responses:
+        "201":
+          description: "Matriculation created"
+    put:
+      summary: "Updates an matriculation for specific education"
+      operationId: "updateMatriculationOfEducation"
+      tags:
+        - matriculation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New matriculation to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Matriculation'
+      responses:
+        "200":
+          description: "Matriculation updated"
+        "404":
+          description: "Matriculation not found"
+  /education/{id}/assessment:
+    get:
+      summary: "Returns all assessment of specific education"
+      operationId: "allAssessmentsOfEducation"
+      tags:
+        - assessment
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Assessment'
+    post:
+      summary: "Creates a new assessment for specific education"
+      operationId: "createAssessmentOfEducation"
+      tags:
+        - assessment
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New assessment to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+      responses:
+        "201":
+          description: "Assessment created"
+    put:
+      summary: "Updates an assessment for specific education"
+      operationId: "updateAssessmentOfEducation"
+      tags:
+        - assessment
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New assessment to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+      responses:
+        "200":
+          description: "Assessment updated"
+        "404":
+          description: "Assessment not found"
+  /education/{id}/qualification:
+    get:
+      summary: "Returns all possible qualifications of specific education"
+      operationId: "allQualificationsOfEducation"
+      tags:
+        - requirement
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "List of qualification ids"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+    post:
+      summary: "Adds a possible qualification for specific education"
+      operationId: "addQualificationsOfEducation"
+      tags:
+        - requirement
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "List of qualification ids"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "integer"
+      responses:
+        "201":
+          description: "Qualification added"
+  /education/{educationId}/qualification/{qualificationId}:
+    delete:
+      summary: "Removes a possible qualifications for specific education"
+      operationId: "removeQualificationsOfEducation"
+      tags:
+        - requirement
+      parameters:
+        - in: path
+          name: educationId
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: qualificationId
+          description: "Id of qualification"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Qualification removed"
+  /qualification/{id}/education:
+    get:
+      summary: "Returns all possible educations of specific qualification"
+      operationId: "allEducationsOfQualification"
+      tags:
+        - requirement
+      parameters:
+        - in: path
+          name: id
+          description: "Id of qualification"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "List of education ids"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+    post:
+      summary: "Adds a possible education for specific qualification"
+      operationId: "addEducationsOfQualification"
+      tags:
+        - requirement
+      parameters:
+        - in: path
+          name: id
+          description: "Id of qualification"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "List of education ids"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "integer"
+      responses:
+        "201":
+          description: "education added"
+  /qualification/{qualificationId}/education/{educationId}:
+    delete:
+      summary: "Removes a possible educations for specific qualification"
+      operationId: "removeEducationsOfQualification"
+      tags:
+        - requirement
+      parameters:
+        - in: path
+          name: qualificationId
+          description: "Id of qualification"
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: educationId
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Education removed"
+  /matriculation/{id}/graduation:
+    get:
+      summary: "Returns all graduation of specific matriculation"
+      operationId: "allGraduationsOfMatriculation"
+      tags:
+        - graduation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of matriculation"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Graduation'
+    post:
+      summary: "Creates a new graduation for specific matriculation"
+      operationId: "createGraduationOfMatriculation"
+      tags:
+        - graduation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of matriculation"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New graduation to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Graduation'
+      responses:
+        "201":
+          description: "Graduation created"
+    put:
+      summary: "Updates an graduation for specific matriculation"
+      operationId: "updateGraduationOfMatriculation"
+      tags:
+        - graduation
+      parameters:
+        - in: path
+          name: id
+          description: "Id of matriculation"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New graduation to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Graduation'
+      responses:
+        "200":
+          description: "Graduation updated"
+        "404":
+          description: "Graduation not found"
+  /matriculation/{id}/grade:
+    get:
+      summary: "Returns all grade of specific matriculation"
+      operationId: "allGradesOfMatriculation"
+      tags:
+        - grade
+      parameters:
+        - in: path
+          name: id
+          description: "Id of matriculation"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Grade'
+    post:
+      summary: "Creates a new grade for specific matriculation"
+      operationId: "createGradeOfMatriculation"
+      tags:
+        - grade
+      parameters:
+        - in: path
+          name: id
+          description: "Id of matriculation"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New grade to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Grade'
+      responses:
+        "201":
+          description: "Grade created"
+    put:
+      summary: "Updates an grade for specific matriculation"
+      operationId: "updateGradeOfMatriculation"
+      tags:
+        - grade
+      parameters:
+        - in: path
+          name: id
+          description: "Id of matriculation"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New grade to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Grade'
+      responses:
+        "200":
+          description: "Grade updated"
+        "404":
+          description: "Grade not found"
+  /assessment/{id}/grade:
+    get:
+      summary: "Returns all grade of specific assessment"
+      operationId: "allGradesOfAssessment"
+      tags:
+        - grade
+      parameters:
+        - in: path
+          name: id
+          description: "Id of assessment"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Grade'
+    post:
+      summary: "Creates a new grade for specific assessment"
+      operationId: "createGradeOfAssessment"
+      tags:
+        - grade
+      parameters:
+        - in: path
+          name: id
+          description: "Id of assessment"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New grade to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Grade'
+      responses:
+        "201":
+          description: "Grade created"
+    put:
+      summary: "Updates an grade for specific assessment"
+      operationId: "updateGradeOfAssessment"
+      tags:
+        - grade
+      parameters:
+        - in: path
+          name: id
+          description: "Id of assessment"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New grade to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Grade'
+      responses:
+        "200":
+          description: "Grade updated"
+        "404":
+          description: "Grade not found"
+components:
+  schemas:
+    Institution:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+          format: "string"
+    Location:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        address:
+          type: "string"
+          format: "string"
+        zip:
+          type: "string"
+          format: "string"
+        city:
+          type: "string"
+          format: "string"
+    Student:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+          format: "string"
+    Education:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        locationId:
+          type: "integer"
+          format: "int64"
+        title:
+          type: "string"
+          format: "string"
+        description:
+          type: "string"
+          format: "string"
+    Qualification:
+      type: object
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+          format: "string"
+        description:
+          type: "string"
+          format: "string"
+    Matriculation:
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        studentId:
+          type: "integer"
+          format: "int64"
+        educationId:
+          type: "integer"
+          format: "int64"
+        date:
+          type: "string"
+          format: "iso8601"
+    Assessment:
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        educationId:
+          type: "integer"
+          format: "int64"
+    Graduation:
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        matriculationId:
+          type: "integer"
+          format: "int64"
+        date:
+          type: "string"
+          format: "iso8601"
+    Grade:
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        matriculationId:
+          type: "integer"
+          format: "int64"
+        grade:
+          type: "number"
+          format: "float"
+        date:
+          type: "string"
+          format: "iso8601"
