@@ -54,6 +54,10 @@ paths:
       responses:
         "201":
           description: "Institution created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /institution/{id}:
     get:
       summary: "Returns specific institution"
@@ -96,6 +100,10 @@ paths:
       responses:
         "200":
           description: "Institution updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Institution not found"
   /institution/{id}/location:
@@ -142,6 +150,10 @@ paths:
       responses:
         "201":
           description: "Location created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /location/{id}:
     patch:
       summary: "Updates an location"
@@ -165,6 +177,10 @@ paths:
       responses:
         "200":
           description: "Location updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Location not found"
   /student:
@@ -197,6 +213,10 @@ paths:
       responses:
         "201":
           description: "Student created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /student/{id}:
     get:
       summary: "Returns specific student"
@@ -239,6 +259,10 @@ paths:
       responses:
         "200":
           description: "Student updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Student not found"
   /location/{id}/education:
@@ -285,6 +309,10 @@ paths:
       responses:
         "201":
           description: "Education created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /education/{id}:
     patch:
       summary: "Updates an education"
@@ -308,6 +336,10 @@ paths:
       responses:
         "200":
           description: "Education updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Education not found"
   /qualification:
@@ -340,6 +372,10 @@ paths:
       responses:
         "201":
           description: "Qualification created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /qualification/{id}:
     get:
       summary: "Returns specific qualification"
@@ -382,6 +418,10 @@ paths:
       responses:
         "200":
           description: "Qualification updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Qualification not found"
   /student/{id}/matriculation:
@@ -428,6 +468,10 @@ paths:
       responses:
         "201":
           description: "Matriculation created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /matriculation/{id}:
     patch:
       summary: "Updates an matriculation"
@@ -451,6 +495,10 @@ paths:
       responses:
         "200":
           description: "Matriculation updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Matriculation not found"
   /education/{id}/matriculation:
@@ -497,6 +545,10 @@ paths:
       responses:
         "201":
           description: "Matriculation created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /education/{id}/assessment:
     get:
       summary: "Returns all assessment of specific education"
@@ -541,6 +593,10 @@ paths:
       responses:
         "201":
           description: "Assessment created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /assessment/{id}:
     patch:
       summary: "Updates an assessment"
@@ -564,6 +620,10 @@ paths:
       responses:
         "200":
           description: "Assessment updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Assessment not found"
   /education/{id}/qualification:
@@ -612,6 +672,10 @@ paths:
       responses:
         "201":
           description: "Qualification added"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /education/{educationId}/qualification/{qualificationId}:
     delete:
       summary: "Removes a possible qualifications for specific education"
@@ -634,6 +698,8 @@ paths:
       responses:
         "200":
           description: "Qualification removed"
+        "404":
+          description: "Requirement does not exist"
   /qualification/{id}/education:
     get:
       summary: "Returns all possible educations of specific qualification"
@@ -679,7 +745,11 @@ paths:
                 type: "integer"
       responses:
         "201":
-          description: "education added"
+          description: "Education added"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /qualification/{qualificationId}/education/{educationId}:
     delete:
       summary: "Removes a possible educations for specific qualification"
@@ -702,6 +772,8 @@ paths:
       responses:
         "200":
           description: "Education removed"
+        "404":
+          description: "Requirement does not exist"
   /matriculation/{id}/graduation:
     get:
       summary: "Returns all graduation of specific matriculation"
@@ -746,6 +818,10 @@ paths:
       responses:
         "201":
           description: "Graduation created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /graduation/{id}:
     patch:
       summary: "Updates an graduation"
@@ -769,6 +845,10 @@ paths:
       responses:
         "200":
           description: "Graduation updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Graduation not found"
   /matriculation/{id}/grade:
@@ -815,6 +895,10 @@ paths:
       responses:
         "201":
           description: "Grade created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
   /grade/{id}:
     patch:
       summary: "Updates an grade"
@@ -838,6 +922,10 @@ paths:
       responses:
         "200":
           description: "Grade updated"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
         "404":
           description: "Grade not found"
   /assessment/{id}/grade:
@@ -884,6 +972,10 @@ paths:
       responses:
         "201":
           description: "Grade created"
+        "400":
+          description: "Request is incomplete or invalid"
+        "403":
+          description: "Insufficient permissions"
 components:
   schemas:
     InstitutionProperties:
