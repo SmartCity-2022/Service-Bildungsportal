@@ -1,24 +1,33 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+
+const _value: string = "";
 
 function App() {
+  const [value, setValue]: [string, (value: string) => void] = React.useState(_value);
+    
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
+      setValue(newValue);
+      axios.put<string>("http://localhost:8080/hello-world", newValue, {headers: {"Content-Type": "text/plain"}});
+  };
+
+    
+  React.useEffect(() => {
+      axios
+          .get<string>("http://localhost:8080/hello-world")
+          .then(res => setValue(res.data));
+  }, []);
+    
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+            <form>
+                <input type="text" value={value} onChange={handleValueChange}/>
+            </form>
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
     </div>
   );
 }
