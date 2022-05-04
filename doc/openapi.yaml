@@ -92,7 +92,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Institution'
+              $ref: '#/components/schemas/InstitutionProperties'
       responses:
         "200":
           description: "Institution updated"
@@ -161,7 +161,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Location'
+              $ref: '#/components/schemas/LocationProperties'
       responses:
         "200":
           description: "Location updated"
@@ -235,7 +235,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Student'
+              $ref: '#/components/schemas/StudentProperties'
       responses:
         "200":
           description: "Student updated"
@@ -304,7 +304,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Education'
+              $ref: '#/components/schemas/EducationProperties'
       responses:
         "200":
           description: "Education updated"
@@ -378,7 +378,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Qualification'
+              $ref: '#/components/schemas/QualificationProperties'
       responses:
         "200":
           description: "Qualification updated"
@@ -447,7 +447,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Matriculation'
+              $ref: '#/components/schemas/MatriculationProperties'
       responses:
         "200":
           description: "Matriculation updated"
@@ -560,7 +560,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Assessment'
+              $ref: '#/components/schemas/AssessmentProperties'
       responses:
         "200":
           description: "Assessment updated"
@@ -765,7 +765,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Graduation'
+              $ref: '#/components/schemas/GraduationProperties'
       responses:
         "200":
           description: "Graduation updated"
@@ -834,7 +834,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Grade'
+              $ref: '#/components/schemas/GradeProperties'
       responses:
         "200":
           description: "Grade updated"
