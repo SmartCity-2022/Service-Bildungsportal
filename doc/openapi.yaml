@@ -932,7 +932,7 @@ components:
           type: "string"
           format: "string"
     Student:
-      type: object
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -941,7 +941,7 @@ components:
           type: "string"
           format: "string"
     Education:
-      type: object
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -956,7 +956,7 @@ components:
           type: "string"
           format: "string"
     Qualification:
-      type: object
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -968,6 +968,7 @@ components:
           type: "string"
           format: "string"
     Matriculation:
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -982,6 +983,7 @@ components:
           type: "string"
           format: "iso8601"
     Assessment:
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -990,6 +992,7 @@ components:
           type: "integer"
           format: "int64"
     Graduation:
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -1001,6 +1004,7 @@ components:
           type: "string"
           format: "iso8601"
     Grade:
+      type: "object"
       properties:
         id:
           type: "integer"
