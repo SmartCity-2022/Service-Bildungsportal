@@ -894,6 +894,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         name:
           type: "string"
           format: "string"
@@ -907,6 +908,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         address:
           type: "string"
           format: "string"
@@ -924,6 +926,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         name:
           type: "string"
           format: "string"
@@ -936,6 +939,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         locationId:
           type: "integer"
           format: "int64"
@@ -954,6 +958,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         name:
           type: "string"
           format: "string"
@@ -968,6 +973,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         studentId:
           type: "integer"
           format: "int64"
@@ -983,6 +989,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         educationId:
           type: "integer"
           format: "int64"
@@ -994,6 +1001,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         matriculationId:
           type: "integer"
           format: "int64"
@@ -1009,6 +1017,7 @@ components:
         id:
           type: "integer"
           format: "int64"
+          readOnly: true
         matriculationId:
           type: "integer"
           format: "int64"
