@@ -54,23 +54,6 @@ paths:
       responses:
         "201":
           description: "Institution created"
-    put:
-      summary: "Updates an institution"
-      operationId: "updateInstitution"
-      tags:
-        - institution
-      requestBody:
-        description: "New institution to be created"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Institution'
-      responses:
-        "200":
-          description: "Institution updated"
-        "404":
-          description: "Institution not found"
   /institution/{id}:
     get:
       summary: "Returns specific institution"
@@ -91,6 +74,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Institution'
+    patch:
+      summary: "Updates an institution"
+      operationId: "updateInstitution"
+      tags:
+        - institution
+      parameters:
+        - in: path
+          name: id
+          description: "Id of institution"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "New institution to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Institution'
+      responses:
+        "200":
+          description: "Institution updated"
+        "404":
+          description: "Institution not found"
   /institution/{id}/location:
     get:
       summary: "Returns all location of specific institution"
@@ -135,20 +142,21 @@ paths:
       responses:
         "201":
           description: "Location created"
-    put:
-      summary: "Updates an location for specific institution"
+  /location/{id}:
+    patch:
+      summary: "Updates an location"
       operationId: "updateLocationOfInstitution"
       tags:
         - location
       parameters:
         - in: path
           name: id
-          description: "Id of institution"
+          description: "Id of location"
           required: true
           schema:
             type: integer
       requestBody:
-        description: "New location to be created"
+        description: "Updated location"
         required: true
         content:
           application/json:
@@ -189,23 +197,6 @@ paths:
       responses:
         "201":
           description: "Student created"
-    put:
-      summary: "Updates an student"
-      operationId: "updateStudent"
-      tags:
-        - student
-      requestBody:
-        description: "New student to be created"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Student'
-      responses:
-        "200":
-          description: "Student updated"
-        "404":
-          description: "Student not found"
   /student/{id}:
     get:
       summary: "Returns specific student"
@@ -226,6 +217,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
+    patch:
+      summary: "Updates an student"
+      operationId: "updateStudent"
+      tags:
+        - student
+      parameters:
+        - in: path
+          name: id
+          description: "Id of student"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "Updated student"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        "200":
+          description: "Student updated"
+        "404":
+          description: "Student not found"
   /location/{id}/education:
     get:
       summary: "Returns all education of specific location"
@@ -270,20 +285,21 @@ paths:
       responses:
         "201":
           description: "Education created"
-    put:
-      summary: "Updates an education for specific location"
+  /education/{id}:
+    patch:
+      summary: "Updates an education"
       operationId: "updateEducationOfLocation"
       tags:
         - education
       parameters:
         - in: path
           name: id
-          description: "Id of location"
+          description: "Id of education"
           required: true
           schema:
             type: integer
       requestBody:
-        description: "New education to be created"
+        description: "Updated education"
         required: true
         content:
           application/json:
@@ -324,23 +340,6 @@ paths:
       responses:
         "201":
           description: "Qualification created"
-    put:
-      summary: "Updates an qualification"
-      operationId: "updateQualification"
-      tags:
-        - qualification
-      requestBody:
-        description: "New qualification to be created"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Qualification'
-      responses:
-        "200":
-          description: "Qualification updated"
-        "404":
-          description: "Qualification not found"
   /qualification/{id}:
     get:
       summary: "Returns specific qualification"
@@ -361,6 +360,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Qualification'
+    patch:
+      summary: "Updates an qualification"
+      operationId: "updateQualification"
+      tags:
+        - qualification
+      parameters:
+        - in: path
+          name: id
+          description: "Id of qualification"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "Updated qualification"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Qualification'
+      responses:
+        "200":
+          description: "Qualification updated"
+        "404":
+          description: "Qualification not found"
   /student/{id}/matriculation:
     get:
       summary: "Returns all matriculation of specific student"
@@ -405,20 +428,21 @@ paths:
       responses:
         "201":
           description: "Matriculation created"
-    put:
-      summary: "Updates an matriculation for specific student"
-      operationId: "updateMatriculationOfStudent"
+  /matriculation/{id}:
+    patch:
+      summary: "Updates an matriculation"
+      operationId: "updateMatriculation"
       tags:
         - matriculation
       parameters:
         - in: path
           name: id
-          description: "Id of student"
+          description: "Id of matriculation"
           required: true
           schema:
             type: integer
       requestBody:
-        description: "New matriculation to be created"
+        description: "Updated matriculation"
         required: true
         content:
           application/json:
@@ -473,30 +497,6 @@ paths:
       responses:
         "201":
           description: "Matriculation created"
-    put:
-      summary: "Updates an matriculation for specific education"
-      operationId: "updateMatriculationOfEducation"
-      tags:
-        - matriculation
-      parameters:
-        - in: path
-          name: id
-          description: "Id of education"
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        description: "New matriculation to be created"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Matriculation'
-      responses:
-        "200":
-          description: "Matriculation updated"
-        "404":
-          description: "Matriculation not found"
   /education/{id}/assessment:
     get:
       summary: "Returns all assessment of specific education"
@@ -541,20 +541,21 @@ paths:
       responses:
         "201":
           description: "Assessment created"
-    put:
-      summary: "Updates an assessment for specific education"
-      operationId: "updateAssessmentOfEducation"
+  /assessment/{id}:
+    patch:
+      summary: "Updates an assessment"
+      operationId: "updateAssessment"
       tags:
         - assessment
       parameters:
         - in: path
           name: id
-          description: "Id of education"
+          description: "Id of assessment"
           required: true
           schema:
             type: integer
       requestBody:
-        description: "New assessment to be created"
+        description: "Updated assessment"
         required: true
         content:
           application/json:
@@ -745,20 +746,21 @@ paths:
       responses:
         "201":
           description: "Graduation created"
-    put:
-      summary: "Updates an graduation for specific matriculation"
-      operationId: "updateGraduationOfMatriculation"
+  /graduation/{id}:
+    patch:
+      summary: "Updates an graduation"
+      operationId: "updateGraduation"
       tags:
         - graduation
       parameters:
         - in: path
           name: id
-          description: "Id of matriculation"
+          description: "Id of graduation"
           required: true
           schema:
             type: integer
       requestBody:
-        description: "New graduation to be created"
+        description: "Updated graduation"
         required: true
         content:
           application/json:
@@ -813,20 +815,21 @@ paths:
       responses:
         "201":
           description: "Grade created"
-    put:
-      summary: "Updates an grade for specific matriculation"
-      operationId: "updateGradeOfMatriculation"
+  /grade/{id}:
+    patch:
+      summary: "Updates an grade"
+      operationId: "updateGrade"
       tags:
         - grade
       parameters:
         - in: path
           name: id
-          description: "Id of matriculation"
+          description: "Id of grade"
           required: true
           schema:
             type: integer
       requestBody:
-        description: "New grade to be created"
+        description: "Updated grade"
         required: true
         content:
           application/json:
@@ -881,30 +884,6 @@ paths:
       responses:
         "201":
           description: "Grade created"
-    put:
-      summary: "Updates an grade for specific assessment"
-      operationId: "updateGradeOfAssessment"
-      tags:
-        - grade
-      parameters:
-        - in: path
-          name: id
-          description: "Id of assessment"
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        description: "New grade to be created"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Grade'
-      responses:
-        "200":
-          description: "Grade updated"
-        "404":
-          description: "Grade not found"
 components:
   schemas:
     Institution:
