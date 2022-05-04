@@ -909,6 +909,8 @@ components:
   schemas:
     Institution:
       type: "object"
+      required:
+        - name
       properties:
         id:
           type: "integer"
@@ -918,6 +920,10 @@ components:
           format: "string"
     Location:
       type: "object"
+      required:
+        - address
+        - zip
+        - city
       properties:
         id:
           type: "integer"
@@ -933,6 +939,8 @@ components:
           format: "string"
     Student:
       type: "object"
+      required:
+        - name
       properties:
         id:
           type: "integer"
@@ -942,6 +950,9 @@ components:
           format: "string"
     Education:
       type: "object"
+      required:
+        - title
+        - description
       properties:
         id:
           type: "integer"
@@ -957,6 +968,9 @@ components:
           format: "string"
     Qualification:
       type: "object"
+      required:
+        - name
+        - description
       properties:
         id:
           type: "integer"
@@ -969,6 +983,8 @@ components:
           format: "string"
     Matriculation:
       type: "object"
+      required:
+        - date
       properties:
         id:
           type: "integer"
@@ -993,6 +1009,8 @@ components:
           format: "int64"
     Graduation:
       type: "object"
+      required:
+        - date
       properties:
         id:
           type: "integer"
@@ -1005,6 +1023,9 @@ components:
           format: "iso8601"
     Grade:
       type: "object"
+      required:
+        - grade
+        - date
       properties:
         id:
           type: "integer"
