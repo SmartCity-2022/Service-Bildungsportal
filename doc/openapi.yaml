@@ -886,10 +886,8 @@ paths:
           description: "Grade created"
 components:
   schemas:
-    Institution:
+    InstitutionProperties:
       type: "object"
-      required:
-        - name
       properties:
         id:
           type: "integer"
@@ -898,12 +896,14 @@ components:
         name:
           type: "string"
           format: "string"
-    Location:
+    Institution:
       type: "object"
-      required:
-        - address
-        - zip
-        - city
+      allOf:
+        - $ref: '#/components/schemas/InstitutionProperties'
+        - required:
+            - name
+    LocationProperties:
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -918,10 +918,16 @@ components:
         city:
           type: "string"
           format: "string"
-    Student:
+    Location:
       type: "object"
-      required:
-        - name
+      allOf:
+        - $ref: '#/components/schemas/LocationProperties'
+        - required:
+            - address
+            - zip
+            - city
+    StudentProperties:
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -930,11 +936,14 @@ components:
         name:
           type: "string"
           format: "string"
-    Education:
+    Student:
       type: "object"
-      required:
-        - title
-        - description
+      allOf:
+        - $ref: '#/components/schemas/StudentProperties'
+        - required:
+            - name
+    EducationProperties:
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -949,11 +958,15 @@ components:
         description:
           type: "string"
           format: "string"
-    Qualification:
+    Education:
       type: "object"
-      required:
-        - name
-        - description
+      allOf:
+        - $ref: '#/components/schemas/EducationProperties'
+        - required:
+            - title
+            - description
+    QualificationProperties:
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -965,10 +978,15 @@ components:
         description:
           type: "string"
           format: "string"
-    Matriculation:
+    Qualification:
       type: "object"
-      required:
-        - date
+      allOf:
+        - $ref: '#/components/schemas/QualificationProperties'
+        - required:
+            - name
+            - description
+    MatriculationProperties:
+      type: "object"
       properties:
         id:
           type: "integer"
@@ -983,7 +1001,13 @@ components:
         date:
           type: "string"
           format: "iso8601"
-    Assessment:
+    Matriculation:
+      type: "object"
+      allOf:
+        - $ref: '#/components/schemas/MatriculationProperties'
+        - required:
+            - date
+    AssessmentProperties:
       type: "object"
       properties:
         id:
@@ -993,7 +1017,13 @@ components:
         educationId:
           type: "integer"
           format: "int64"
-    Graduation:
+    Assessment:
+      type: "object"
+      allOf:
+        - $ref: '#/components/schemas/AssessmentProperties'
+        - required:
+            - educationId
+    GraduationProperties:
       type: "object"
       required:
         - date
@@ -1008,7 +1038,14 @@ components:
         date:
           type: "string"
           format: "iso8601"
-    Grade:
+    Graduation:
+      type: "object"
+      allOf:
+        - $ref: '#/components/schemas/GraduationProperties'
+        - required:
+            - matriculationd
+            - date
+    GradeProperties:
       type: "object"
       required:
         - grade
@@ -1027,3 +1064,10 @@ components:
         date:
           type: "string"
           format: "iso8601"
+    Grade:
+      type: "object"
+      allOf:
+        - $ref: '#/components/schemas/GradeProperties'
+        - required:
+            - grade
+            - date
