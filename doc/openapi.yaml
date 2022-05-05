@@ -102,6 +102,8 @@ paths:
           description: "Institution updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -152,6 +154,8 @@ paths:
           description: "Location created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /location/{id}:
@@ -179,6 +183,8 @@ paths:
           description: "Location updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -215,6 +221,8 @@ paths:
           description: "Student created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /student/{id}:
@@ -261,6 +269,8 @@ paths:
           description: "Student updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -311,6 +321,8 @@ paths:
           description: "Education created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /education/{id}:
@@ -338,6 +350,8 @@ paths:
           description: "Education updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -374,6 +388,8 @@ paths:
           description: "Qualification created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /qualification/{id}:
@@ -420,6 +436,8 @@ paths:
           description: "Qualification updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -470,6 +488,8 @@ paths:
           description: "Matriculation created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /matriculation/{id}:
@@ -497,6 +517,8 @@ paths:
           description: "Matriculation updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -547,6 +569,8 @@ paths:
           description: "Matriculation created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /education/{id}/assessment:
@@ -595,6 +619,8 @@ paths:
           description: "Assessment created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /assessment/{id}:
@@ -622,6 +648,8 @@ paths:
           description: "Assessment updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -674,6 +702,8 @@ paths:
           description: "Qualification added"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /education/{educationId}/qualification/{qualificationId}:
@@ -748,6 +778,8 @@ paths:
           description: "Education added"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /qualification/{qualificationId}/education/{educationId}:
@@ -820,6 +852,8 @@ paths:
           description: "Graduation created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /graduation/{id}:
@@ -847,6 +881,8 @@ paths:
           description: "Graduation updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -897,6 +933,8 @@ paths:
           description: "Grade created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
   /grade/{id}:
@@ -924,6 +962,8 @@ paths:
           description: "Grade updated"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
         "404":
@@ -974,6 +1014,8 @@ paths:
           description: "Grade created"
         "400":
           description: "Request is incomplete or invalid"
+        "401":
+          description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
 components:
