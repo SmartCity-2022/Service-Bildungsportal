@@ -16,39 +16,38 @@ import kotlin.collections.List
 @Validated
 @RequestMapping("\${api.base-path:}")
 class AssessmentApiController {
-
-
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/assessment/{id}/grade"],
         produces = ["application/json"]
     )
-    fun allGradesOfAssessment( @PathVariable("id") id: Int
-): ResponseEntity<List<Grade>> {
+    fun allGradesOfAssessment(
+        @PathVariable("id") id: Int
+    ): ResponseEntity<List<Grade>> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 
     @RequestMapping(
         method = [RequestMethod.POST],
         value = ["/assessment/{id}/grade"],
         consumes = ["application/json"]
     )
-    fun createGradeOfAssessment( @PathVariable("id") id: Int
-, @Valid @RequestBody grade: Grade
+    fun createGradeOfAssessment(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody grade: Grade
 ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 
     @RequestMapping(
         method = [RequestMethod.PATCH],
         value = ["/assessment/{id}"],
         consumes = ["application/json"]
     )
-    fun updateAssessment( @PathVariable("id") id: Int
-, @Valid @RequestBody assessmentProperties: AssessmentProperties
-): ResponseEntity<Unit> {
+    fun updateAssessment(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody assessmentProperties: AssessmentProperties
+    ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 }

@@ -13,16 +13,15 @@ import javax.validation.Valid
 @Validated
 @RequestMapping("\${api.base-path:}")
 class GraduationApiController {
-
-
     @RequestMapping(
         method = [RequestMethod.PATCH],
         value = ["/graduation/{id}"],
         consumes = ["application/json"]
     )
-    fun updateGraduation( @PathVariable("id") id: Int
-, @Valid @RequestBody graduationProperties: GraduationProperties
-): ResponseEntity<Unit> {
+    fun updateGraduation(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody graduationProperties: GraduationProperties
+    ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 }

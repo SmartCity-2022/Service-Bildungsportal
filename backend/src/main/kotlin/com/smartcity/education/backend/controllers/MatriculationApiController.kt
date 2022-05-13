@@ -17,62 +17,61 @@ import kotlin.collections.List
 @Validated
 @RequestMapping("\${api.base-path:}")
 class MatriculationApiController {
-
-
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/matriculation/{id}/grade"],
         produces = ["application/json"]
     )
-    fun allGradesOfMatriculation( @PathVariable("id") id: Int
-): ResponseEntity<List<Grade>> {
+    fun allGradesOfMatriculation(
+        @PathVariable("id") id: Int
+    ): ResponseEntity<List<Grade>> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/matriculation/{id}/graduation"],
         produces = ["application/json"]
     )
-    fun allGraduationsOfMatriculation( @PathVariable("id") id: Int
-): ResponseEntity<List<Graduation>> {
+    fun allGraduationsOfMatriculation(
+        @PathVariable("id") id: Int
+    ): ResponseEntity<List<Graduation>> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 
     @RequestMapping(
         method = [RequestMethod.POST],
         value = ["/matriculation/{id}/grade"],
         consumes = ["application/json"]
     )
-    fun createGradeOfMatriculation( @PathVariable("id") id: Int
-, @Valid @RequestBody grade: Grade
-): ResponseEntity<Unit> {
+    fun createGradeOfMatriculation(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody grade: Grade
+    ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 
     @RequestMapping(
         method = [RequestMethod.POST],
         value = ["/matriculation/{id}/graduation"],
         consumes = ["application/json"]
     )
-    fun createGraduationOfMatriculation( @PathVariable("id") id: Int
-, @Valid @RequestBody graduation: Graduation
-): ResponseEntity<Unit> {
+    fun createGraduationOfMatriculation(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody graduation: Graduation
+    ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 
     @RequestMapping(
         method = [RequestMethod.PATCH],
         value = ["/matriculation/{id}"],
         consumes = ["application/json"]
     )
-    fun updateMatriculation( @PathVariable("id") id: Int
-, @Valid @RequestBody matriculationProperties: MatriculationProperties
-): ResponseEntity<Unit> {
+    fun updateMatriculation(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody matriculationProperties: MatriculationProperties
+    ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 }

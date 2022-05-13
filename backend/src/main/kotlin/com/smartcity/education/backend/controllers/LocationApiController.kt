@@ -16,39 +16,38 @@ import kotlin.collections.List
 @Validated
 @RequestMapping("\${api.base-path:}")
 class LocationApiController {
-
-
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/location/{id}/education"],
         produces = ["application/json"]
     )
-    fun allEducationsOfLocation( @PathVariable("id") id: Int
-): ResponseEntity<List<Education>> {
+    fun allEducationsOfLocation(
+        @PathVariable("id") id: Int
+    ): ResponseEntity<List<Education>> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 
     @RequestMapping(
         method = [RequestMethod.POST],
         value = ["/location/{id}/education"],
         consumes = ["application/json"]
     )
-    fun createEducationOfLocation( @PathVariable("id") id: Int
-, @Valid @RequestBody education: Education
-): ResponseEntity<Unit> {
+    fun createEducationOfLocation(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody education: Education
+    ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
-
 
     @RequestMapping(
         method = [RequestMethod.PATCH],
         value = ["/location/{id}"],
         consumes = ["application/json"]
     )
-    fun updateLocationOfInstitution( @PathVariable("id") id: Int
-, @Valid @RequestBody locationProperties: LocationProperties
-): ResponseEntity<Unit> {
+    fun updateLocationOfInstitution(
+        @PathVariable("id") id: Int,
+        @Valid @RequestBody locationProperties: LocationProperties
+    ): ResponseEntity<Unit> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 }
