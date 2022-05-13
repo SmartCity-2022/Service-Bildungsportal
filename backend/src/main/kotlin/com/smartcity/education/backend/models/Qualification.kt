@@ -9,13 +9,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @param id Id of the qualification
  */
 data class Qualification(
+    @field:JsonProperty("id")
+    val id: Long? = null,
 
-    @field:JsonProperty("name", required = true) val name: String,
+    @field:JsonProperty("name", required = true)
+    val name: String,
 
-    @field:JsonProperty("description", required = true) val description: String,
-
-    @field:JsonProperty("id") val id: Long? = null
-) {
-
-}
+    @field:JsonProperty("description", required = true)
+    val description: String
+)
 

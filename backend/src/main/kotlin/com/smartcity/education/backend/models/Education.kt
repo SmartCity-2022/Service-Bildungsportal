@@ -10,15 +10,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @param locationId Id of the educations location
  */
 data class Education(
+    @field:JsonProperty("id")
+    val id: Long? = null,
 
-    @field:JsonProperty("title", required = true) val title: String,
+    @field:JsonProperty("title", required = true)
+    val title: String,
 
-    @field:JsonProperty("description", required = true) val description: String,
+    @field:JsonProperty("description", required = true)
+    val description: String,
 
-    @field:JsonProperty("id") val id: Long? = null,
-
-    @field:JsonProperty("locationId") val locationId: Long? = null
-) {
-
-}
+    @field:JsonProperty("locationId")
+    val locationId: Long? = null
+)
 

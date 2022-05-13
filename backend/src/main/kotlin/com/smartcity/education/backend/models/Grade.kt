@@ -10,15 +10,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @param matriculationId Id of the grades matriculation
  */
 data class Grade(
+    @field:JsonProperty("id")
+    val id: Long? = null,
 
-    @field:JsonProperty("grade", required = true) val grade: Float,
+    @field:JsonProperty("grade", required = true)
+    val grade: Float,
 
-    @field:JsonProperty("date", required = true) val date: String,
+    @field:JsonProperty("date", required = true)
+    val date: String,
 
-    @field:JsonProperty("id") val id: Long? = null,
-
-    @field:JsonProperty("matriculationId") val matriculationId: Long? = null
-) {
-
-}
+    @field:JsonProperty("matriculationId")
+    val matriculationId: Long? = null
+)
 

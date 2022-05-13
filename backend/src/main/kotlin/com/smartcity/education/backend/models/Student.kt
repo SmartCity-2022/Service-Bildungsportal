@@ -8,11 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @param id Id of the student
  */
 data class Student(
+    @field:JsonProperty("id")
+    val id: Long? = null,
 
-    @field:JsonProperty("name", required = true) val name: String,
-
-    @field:JsonProperty("id") val id: Long? = null
-) {
-
-}
+    @field:JsonProperty("name", required = true)
+    val name: String
+)
 
