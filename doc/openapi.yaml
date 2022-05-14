@@ -1073,6 +1073,9 @@ components:
         city:
           type: "string"
           format: "string"
+        institutionId:
+          type: "integer"
+          format: "int64"
     Location:
       type: "object"
       allOf:

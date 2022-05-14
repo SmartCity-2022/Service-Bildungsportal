@@ -20,6 +20,9 @@ data class LocationProperties(
     val zip: String? = null,
 
     @field:JsonProperty("city")
-    val city: String? = null
+    val city: String? = null,
+
+    @field:JsonProperty("institutionId")
+    val institutionId: String? = null
 )
 

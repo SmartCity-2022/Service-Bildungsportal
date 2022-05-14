@@ -1,6 +1,8 @@
 package com.smartcity.education.backend.models
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import javax.persistence.*
 
 /**
  * Data class representing an education
@@ -9,7 +11,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @param id Id of the education
  * @param locationId Id of the educations location
  */
+@Entity
 data class Education(
+    @field:Id
+    @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     @field:JsonProperty("id")
     val id: Long? = null,
 
@@ -19,7 +24,8 @@ data class Education(
     @field:JsonProperty("description", required = true)
     val description: String,
 
-    @field:JsonProperty("locationId")
-    val locationId: Long? = null
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @field:JsonIgnore
+    var location: Location? = null
 )
 
