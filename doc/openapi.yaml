@@ -161,7 +161,7 @@ paths:
   /location/{id}:
     patch:
       summary: "Updates an location"
-      operationId: "updateLocationOfInstitution"
+      operationId: "updateLocation"
       tags:
         - location
       parameters:
