@@ -600,12 +600,12 @@ paths:
           schema:
             type: integer
       requestBody:
-        description: "New matriculation to be created"
+        description: "Student id for matriculation"
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Matriculation'
+              type: "integer"
       responses:
         "201":
           description: "Matriculation created"
@@ -1193,15 +1193,19 @@ components:
           type: "integer"
           format: "int64"
           readOnly: true
+        title:
+          type: "string"
+          format: "string"
         educationId:
           type: "integer"
           format: "int64"
+          readOnly: true
     Assessment:
       type: "object"
       allOf:
         - $ref: '#/components/schemas/AssessmentProperties'
         - required:
-            - educationId
+            - title
     GraduationProperties:
       type: "object"
       required:

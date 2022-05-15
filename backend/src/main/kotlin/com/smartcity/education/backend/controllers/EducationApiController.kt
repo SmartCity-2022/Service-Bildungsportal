@@ -1,13 +1,22 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.assigners.Assigner
 import com.smartcity.education.backend.models.Assessment
+import com.smartcity.education.backend.models.Education
 import com.smartcity.education.backend.models.EducationProperties
 import com.smartcity.education.backend.models.Matriculation
+import com.smartcity.education.backend.repositories.EducationRepository
+import com.smartcity.education.backend.repositories.QualificationRepository
+import com.smartcity.education.backend.repositories.StudentRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
+import java.net.URI
+import java.time.LocalDateTime
 
 import javax.validation.Valid
 
@@ -17,16 +26,39 @@ import kotlin.collections.List
 @Validated
 @RequestMapping("\${api.base-path:}")
 class EducationApiController {
+    @Autowired
+    private val repository: EducationRepository? = null
+    @Autowired
+    private val qualificationRepository: QualificationRepository? = null
+    @Autowired
+    private val studentRepository: StudentRepository? = null
+    @Autowired
+    private val assigner: Assigner<EducationProperties, Education>? = null
+
     @RequestMapping(
         method = [RequestMethod.POST],
         value = ["/education/{id}/qualification"],
         consumes = ["application/json"]
     )
     fun addQualificationsOfEducation(
-        @PathVariable("id") id: Int,
-        @Valid @RequestBody requestBody: List<Int>
+        @PathVariable("id") id: Long,
+        @Valid @RequestBody requestBody: List<Long>
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val education = repository?.findByIdOrNull(id)
+        val qualifications = qualificationRepository?.findAllById(requestBody)
+
+        return education?.let {
+            qualifications?.forEach { q -> q.educations.add(it) }
+            it.qualifications.addAll(qualifications ?: emptyList())
+            repository?.save(it)
+
+            ResponseEntity
+                .created(URI("/education/$id/qualification"))
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -35,9 +67,17 @@ class EducationApiController {
         produces = ["application/json"]
     )
     fun allAssessmentsOfEducation(
-        @PathVariable("id") id: Int
+        @PathVariable("id") id: Long
     ): ResponseEntity<List<Assessment>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val education = repository?.findByIdOrNull(id)
+
+        return education?.let {
+            ResponseEntity
+                .ok(it.assessments)
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -46,9 +86,17 @@ class EducationApiController {
         produces = ["application/json"]
     )
     fun allMatriculationsOfEducation(
-        @PathVariable("id") id: Int
+        @PathVariable("id") id: Long
     ): ResponseEntity<List<Matriculation>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val education = repository?.findByIdOrNull(id)
+
+        return education?.let {
+            ResponseEntity
+                .ok(it.matriculations)
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -57,9 +105,17 @@ class EducationApiController {
         produces = ["application/json"]
     )
     fun allQualificationsOfEducation(
-        @PathVariable("id") id: Int
-    ): ResponseEntity<List<Int>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        @PathVariable("id") id: Long
+    ): ResponseEntity<List<Long>> {
+        val education = repository?.findByIdOrNull(id)
+
+        return education?.let {
+            ResponseEntity
+                .ok(it.qualifications.map { it.id ?: 0 })
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -68,10 +124,23 @@ class EducationApiController {
         consumes = ["application/json"]
     )
     fun createAssessmentOfEducation(
-        @PathVariable("id") id: Int,
+        @PathVariable("id") id: Long,
         @Valid @RequestBody assessment: Assessment
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val education = repository?.findByIdOrNull(id)
+
+        return education?.let {
+            assessment.education = it
+            it.assessments.add(assessment)
+            repository?.save(it)
+
+            ResponseEntity
+                .created(URI("/assessment/${assessment.id}"))
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -80,10 +149,30 @@ class EducationApiController {
         consumes = ["application/json"]
     )
     fun createMatriculationOfEducation(
-        @PathVariable("id") id: Int,
-        @Valid @RequestBody matriculation: Matriculation
+        @PathVariable("id") id: Long,
+        @Valid @RequestBody studentId: Long
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val education = repository?.findByIdOrNull(id)
+
+        return education?.let {
+            val student = studentRepository?.findByIdOrNull(studentId)
+            val matriculation = Matriculation(
+                education = it,
+                student = student,
+                date = LocalDateTime.now()
+            )
+
+            student?.let { it.matriculations.add(matriculation) }
+            it.matriculations.add(matriculation)
+            repository?.save(it)
+
+            ResponseEntity
+                .created(URI("/matriculation/${matriculation.id}"))
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -91,10 +180,41 @@ class EducationApiController {
         value = ["/education/{educationId}/qualification/{qualificationId}"]
     )
     fun removeQualificationsOfEducation(
-        @PathVariable("educationId") educationId: Int,
-        @PathVariable("qualificationId") qualificationId: Int
+        @PathVariable("educationId") educationId: Long,
+        @PathVariable("qualificationId") qualificationId: Long
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val education = repository?.findByIdOrNull(educationId)
+
+        return education?.let {
+            it.qualifications.removeIf { it.id == qualificationId }
+            repository?.save(it)
+
+            ResponseEntity
+                .ok()
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
+    }
+
+    @RequestMapping(
+        method = [RequestMethod.GET],
+        value = ["/education/{id}"],
+        produces = ["application/json"]
+    )
+    fun singleEducation(
+        @PathVariable("id") id: Long
+    ): ResponseEntity<Education> {
+        val education = repository?.findByIdOrNull(id)
+
+        return education?.let {
+            ResponseEntity
+                .ok(it)
+        } ?:
+        ResponseEntity
+            .notFound()
+            .build()
     }
 
     @RequestMapping(
@@ -103,9 +223,21 @@ class EducationApiController {
         consumes = ["application/json"]
     )
     fun updateEducationOfLocation(
-        @PathVariable("id") id: Int,
+        @PathVariable("id") id: Long,
         @Valid @RequestBody educationProperties: EducationProperties
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val education = repository?.findByIdOrNull(id)
+
+        return education?.let {
+            assigner?.assign(educationProperties, it)
+            repository?.save(it)
+
+            ResponseEntity
+                .ok()
+                .build()
+        } ?:
+        ResponseEntity
+            .notFound()
+            .build()
     }
 }
