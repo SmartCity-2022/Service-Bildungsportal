@@ -1,0 +1,17 @@
+.card {
+    width: 80%;
+    margin: 30px auto;
+}
+
+.education-card .card-header {
+    background-color: var(--md-blue-500);
+}
+
+.education-card .card-body {
+    background-color: var(--md-blue-300);
+}
+
+a, .card-header .card-title {
+    color: black;
+    text-decoration: none;
+}

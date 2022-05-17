@@ -11,12 +11,25 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import Header from "./Header";
+import Overview from './Overview';
+
+import {Configuration} from "./api";
+
+const config = new Configuration({
+    basePath: process.env.REACT_APP_BACKEND
+})
+
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
         <Header/>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Overview config={config}/>}/>
+            </Routes>
+        </BrowserRouter>
     </React.StrictMode>
 );
 
