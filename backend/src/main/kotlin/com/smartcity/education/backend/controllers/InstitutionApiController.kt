@@ -1,29 +1,38 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.assigners.Assigner
 import com.smartcity.education.backend.models.Institution
 import com.smartcity.education.backend.models.InstitutionProperties
 import com.smartcity.education.backend.models.Location
-import org.springframework.http.HttpStatus
+import com.smartcity.education.backend.repositories.InstitutionRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.ResponseEntity
-
-import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
-
+import org.springframework.web.bind.annotation.*
+import java.net.URI
 import javax.validation.Valid
-
-import kotlin.collections.List
 
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
 class InstitutionApiController {
+    @Autowired
+    private val repository: InstitutionRepository? = null
+
+    @Autowired
+    private val assigner: Assigner<InstitutionProperties, Institution>? = null
+
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/institution"],
         produces = ["application/json"]
     )
-    fun allInstitutions(): ResponseEntity<List<Institution>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    fun allInstitutions(): ResponseEntity<Iterable<Institution>> {
+        val results = repository?.findAll()
+
+        return ResponseEntity
+            .ok(results)
     }
 
     @RequestMapping(
@@ -32,9 +41,17 @@ class InstitutionApiController {
         produces = ["application/json"]
     )
     fun allLocationsOfInstitution(
-        @PathVariable("id") id: Int
-    ): ResponseEntity<List<Location>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        @PathVariable("id") id: Long
+    ): ResponseEntity<Iterable<Location>> {
+        val institution = repository?.findByIdOrNull(id)
+
+        return institution?.let {
+            ResponseEntity
+                .ok(it.locations)
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -45,7 +62,11 @@ class InstitutionApiController {
     fun createInstitution(
         @Valid @RequestBody institution: Institution
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        repository?.save(institution)
+
+        return ResponseEntity
+            .created(URI("/institution/${institution.id}"))
+            .build()
     }
 
     @RequestMapping(
@@ -54,10 +75,23 @@ class InstitutionApiController {
         consumes = ["application/json"]
     )
     fun createLocationOfInstitution(
-        @PathVariable("id") id: Int,
+        @PathVariable("id") id: Long,
         @Valid @RequestBody location: Location
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val institution = repository?.findByIdOrNull(id)
+
+        return institution?.let {
+            location.institution = it
+            it.locations.add(location)
+            repository?.save(it)
+
+            ResponseEntity
+                .created(URI("/location/${location.id}"))
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -66,9 +100,17 @@ class InstitutionApiController {
         produces = ["application/json"]
     )
     fun singleInstitution(
-        @PathVariable("id") id: Int
+        @PathVariable("id") id: Long
     ): ResponseEntity<Institution> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val result = repository?.findByIdOrNull(id)
+
+        return result?.let {
+            ResponseEntity
+                .ok(it)
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -77,9 +119,20 @@ class InstitutionApiController {
         consumes = ["application/json"]
     )
     fun updateInstitution(
-        @PathVariable("id") id: Int,
+        @PathVariable("id") id: Long,
         @Valid @RequestBody institutionProperties: InstitutionProperties
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val institution = repository?.findByIdOrNull(id)
+
+        return institution?.let {
+            assigner?.assign(institutionProperties, it)
+            repository?.save(it)
+            ResponseEntity
+                .ok()
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 }
