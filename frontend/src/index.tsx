@@ -13,6 +13,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Header from "./Header";
 import Overview from './Overview';
 import EducationDetails from "./EducationDetails";
+import InstitutionDetails from "./InstitutionDetails";
 
 import {Configuration} from "./api";
 
@@ -30,6 +31,7 @@ root.render(
             <Routes>
                 <Route path="/" element={<Overview config={config}/>}/>
                 <Route path="/education/:id" element={<EducationDetails config={config}/>}/>
+                <Route path="/institution/:id" element={<InstitutionDetails config={config}/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
