@@ -347,6 +347,27 @@ paths:
         "403":
           description: "Insufficient permissions"
   /education/{id}:
+    get:
+      summary: "Returns specific education"
+      operationId: "singleEducation"
+      tags:
+        - education
+      parameters:
+        - in: path
+          name: id
+          description: "Id of education"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Education'
+        "404":
+          description: "Education not found"
     patch:
       summary: "Updates an education"
       operationId: "updateEducationOfLocation"
