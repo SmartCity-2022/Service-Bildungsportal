@@ -159,6 +159,27 @@ paths:
         "403":
           description: "Insufficient permissions"
   /location/{id}:
+    get:
+      summary: "Returns specific location"
+      operationId: "singleLocation"
+      tags:
+        - location
+      parameters:
+        - in: path
+          name: id
+          description: "Id of location"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        "404":
+          description: "Location not found"
     patch:
       summary: "Updates an location"
       operationId: "updateLocation"
