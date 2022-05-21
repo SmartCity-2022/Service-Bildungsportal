@@ -100,6 +100,36 @@ class LocationApiControllerTests {
     }
 
     @Test
+    fun testSingleLocation_DoesNotExist() {
+        val id = 0L
+
+        `when`(repository?.findById(id)).thenReturn(Optional.empty())
+
+        val result = sut?.singleLocation(id)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.NOT_FOUND)
+
+        verify(repository, times(1))?.findById(id)
+    }
+
+    @Test
+    fun testSingleLocation_DoesExist() {
+        val id = 0L
+        val obj = Location(
+            address = "",
+            zip = "",
+            city = "",
+        )
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+
+        val result = sut?.singleLocation(id)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.OK)
+        Assertions.assertEquals(result?.body, obj)
+
+        verify(repository, times(1))?.findById(id)
+    }
+
+    @Test
     fun testUpdateLocation_DoesNotExist() {
         val id = 0L
         val props = LocationProperties()
