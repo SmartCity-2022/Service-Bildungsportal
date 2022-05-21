@@ -11,6 +11,9 @@ data class AssessmentProperties(
     @field:JsonProperty("id")
     val id: Long? = null,
 
+    @field:JsonProperty("title")
+    val title: String?,
+
     @field:JsonProperty("educationId")
     val educationId: Long? = null
 )

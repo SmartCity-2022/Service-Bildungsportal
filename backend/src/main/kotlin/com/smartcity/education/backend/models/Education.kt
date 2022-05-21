@@ -16,16 +16,31 @@ data class Education(
     @field:Id
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     @field:JsonProperty("id")
-    val id: Long? = null,
+    var id: Long? = null,
 
     @field:JsonProperty("title", required = true)
-    val title: String,
+    var title: String,
 
     @field:JsonProperty("description", required = true)
-    val description: String,
+    var description: String,
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @field:JsonIgnore
-    var location: Location? = null
-)
+    var location: Location? = null,
+
+    @field:JsonIgnore
+    @field:ManyToMany(cascade = [CascadeType.ALL])
+    val qualifications: MutableList<Qualification> = ArrayList(),
+
+    @field:JsonIgnore
+    @field:OneToMany(mappedBy = "education", cascade = [CascadeType.ALL])
+    val assessments: MutableList<Assessment> = ArrayList(),
+
+    @field:JsonIgnore
+    @field:OneToMany(mappedBy = "education", cascade = [CascadeType.ALL])
+    val matriculations: MutableList<Matriculation> = ArrayList()
+) {
+    @get:JsonProperty("locationId")
+    val locationId: Long? get() = location?.id
+}
 
