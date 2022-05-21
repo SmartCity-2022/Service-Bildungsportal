@@ -106,7 +106,7 @@ class LocationApiControllerTests {
         verify(repository, times(1))?.findById(id)
         verify(repository, times(1))?.save(obj)
         verify(template, times(1))?.convertAndSend(
-            Constants.Exchanges.education,
+            Constants.exchange,
             Constants.RoutingKeys.created,
             educationId.toString()
         )

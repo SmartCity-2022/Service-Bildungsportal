@@ -1,9 +1,7 @@
 package com.smartcity.education.backend
 
 object Constants {
-    object Exchanges {
-        const val education = "education"
-    }
+    val exchange = System.getenv("RABBITMQ_EXCHANGE") ?: "smartcity"
 
     object RoutingKeys {
         const val created = "service.education.created"

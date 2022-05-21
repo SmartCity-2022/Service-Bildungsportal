@@ -70,7 +70,7 @@ class LocationApiController {
 
             created?.educations?.last()?.id?.let { id ->
                 template?.convertAndSend(
-                    Constants.Exchanges.education,
+                    Constants.exchange,
                     Constants.RoutingKeys.created,
                     id.toString()
                 )

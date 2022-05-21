@@ -13,7 +13,7 @@ class BackendApplication {
 
 	@Bean
 	fun topicBinding(): Declarables {
-		val exchange = TopicExchange(Constants.Exchanges.education, false, false)
+		val exchange = TopicExchange(Constants.exchange, false, false)
 
 		val createdQueue = Queue("", true, true, false)
 
