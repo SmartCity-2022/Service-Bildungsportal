@@ -1,5 +1,6 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.Constants
 import com.smartcity.education.backend.assigners.LocationAssigner
 import com.smartcity.education.backend.models.Education
 import com.smartcity.education.backend.models.InstitutionProperties
@@ -9,6 +10,7 @@ import com.smartcity.education.backend.repositories.LocationRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -22,6 +24,9 @@ class LocationApiControllerTests {
 
     @MockBean
     private val assigner: LocationAssigner? = null
+
+    @MockBean
+    private val template: RabbitTemplate? = null
 
     @Autowired
     private val sut: LocationApiController? = null
@@ -80,23 +85,31 @@ class LocationApiControllerTests {
     @Test
     fun testCreateEducationOfLocation_DoesExist() {
         val id = 0L
+        val educationId = 1L
         val obj = Location(
             address = "",
             city = "",
             zip = ""
         )
         val education = Education(
+            id = educationId,
             title = "",
             description = ""
         )
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(repository?.save(obj)).thenReturn(obj)
 
         val result = sut?.createEducationOfLocation(id, education)
         Assertions.assertEquals(result?.statusCode, HttpStatus.CREATED)
 
         verify(repository, times(1))?.findById(id)
         verify(repository, times(1))?.save(obj)
+        verify(template, times(1))?.convertAndSend(
+            Constants.exchange,
+            Constants.RoutingKeys.created,
+            educationId.toString()
+        )
     }
 
     @Test
