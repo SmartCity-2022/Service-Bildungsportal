@@ -17,7 +17,7 @@ data class Student(
     val id: Long? = null,
 
     @field:JsonProperty("name", required = true)
-    val name: String,
+    var name: String,
 
     @field:OneToMany(mappedBy = "student", cascade = [CascadeType.ALL])
     @field:JsonIgnore

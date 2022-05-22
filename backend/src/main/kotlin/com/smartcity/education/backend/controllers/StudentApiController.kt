@@ -1,13 +1,18 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.assigners.StudentAssigner
 import com.smartcity.education.backend.models.Matriculation
 import com.smartcity.education.backend.models.Student
 import com.smartcity.education.backend.models.StudentProperties
+import com.smartcity.education.backend.repositories.StudentRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
 import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
+import java.net.URI
 
 import javax.validation.Valid
 
@@ -17,15 +22,28 @@ import kotlin.collections.List
 @Validated
 @RequestMapping("\${api.base-path:}")
 class StudentApiController {
+    @Autowired
+    private val repository: StudentRepository? = null
+    @Autowired
+    private val assigner: StudentAssigner? = null
+
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/student/{id}/matriculation"],
         produces = ["application/json"]
     )
     fun allMatriculationsOfStudent(
-        @PathVariable("id") id: Int
+        @PathVariable("id") id: Long
     ): ResponseEntity<List<Matriculation>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val student = repository?.findByIdOrNull(id)
+
+        return student?.let {
+            ResponseEntity
+                .ok(it.matriculations)
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -33,8 +51,11 @@ class StudentApiController {
         value = ["/student"],
         produces = ["application/json"]
     )
-    fun allStudents(): ResponseEntity<List<Student>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    fun allStudents(): ResponseEntity<Iterable<Student>> {
+        val students = repository?.findAll()
+
+        return ResponseEntity
+            .ok(students)
     }
 
     @RequestMapping(
@@ -43,10 +64,23 @@ class StudentApiController {
         consumes = ["application/json"]
     )
     fun createMatriculationOfStudent(
-        @PathVariable("id") id: Int,
+        @PathVariable("id") id: Long,
         @Valid @RequestBody matriculation: Matriculation
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val student = repository?.findByIdOrNull(id)
+
+        return student?.let {
+            matriculation.student = it
+            it.matriculations.add(matriculation)
+            repository?.save(it)
+
+            ResponseEntity
+                .created(URI("/matriculation/${matriculation.id}"))
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -57,7 +91,11 @@ class StudentApiController {
     fun createStudent(
         @Valid @RequestBody student: Student
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        repository?.save(student)
+
+        return ResponseEntity
+            .created(URI("/student/${student.id}"))
+            .build()
     }
 
     @RequestMapping(
@@ -66,9 +104,17 @@ class StudentApiController {
         produces = ["application/json"]
     )
     fun singleStudent(
-        @PathVariable("id") id: Int
+        @PathVariable("id") id: Long
     ): ResponseEntity<Student> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val student = repository?.findByIdOrNull(id)
+
+        return student?.let {
+            ResponseEntity
+                .ok(it)
+        } ?:
+            ResponseEntity
+               .notFound()
+               .build()
     }
 
     @RequestMapping(
@@ -77,9 +123,21 @@ class StudentApiController {
         consumes = ["application/json"]
     )
     fun updateStudent(
-        @PathVariable("id") id: Int,
+        @PathVariable("id") id: Long,
         @Valid @RequestBody studentProperties: StudentProperties
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val student = repository?.findByIdOrNull(id)
+
+        return student?.let {
+            assigner?.assign(studentProperties, it)
+            repository?.save(it)
+            
+            ResponseEntity
+                .ok()
+                .build()
+        } ?:
+        ResponseEntity
+            .notFound()
+            .build()
     }
 }
