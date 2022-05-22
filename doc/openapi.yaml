@@ -701,7 +701,7 @@ paths:
       summary: "Returns all possible qualifications of specific education"
       operationId: "allQualificationsOfEducation"
       tags:
-        - requirement
+        - qualification
       parameters:
         - in: path
           name: id

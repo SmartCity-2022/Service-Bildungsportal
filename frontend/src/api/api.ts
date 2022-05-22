@@ -2818,6 +2818,40 @@ export const QualificationApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @summary Returns all possible qualifications of specific education
+         * @param {number} id Id of education
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        allQualificationsOfEducation: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('allQualificationsOfEducation', 'id', id)
+            const localVarPath = `/education/{id}/qualification`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Creates a new qualification
          * @param {Qualification} qualification New qualification to be created
          * @param {*} [options] Override http request option.
@@ -2948,6 +2982,17 @@ export const QualificationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Returns all possible qualifications of specific education
+         * @param {number} id Id of education
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async allQualificationsOfEducation(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.allQualificationsOfEducation(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Creates a new qualification
          * @param {Qualification} qualification New qualification to be created
          * @param {*} [options] Override http request option.
@@ -3001,6 +3046,16 @@ export const QualificationApiFactory = function (configuration?: Configuration, 
         },
         /**
          * 
+         * @summary Returns all possible qualifications of specific education
+         * @param {number} id Id of education
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        allQualificationsOfEducation(id: number, options?: any): AxiosPromise<Array<number>> {
+            return localVarFp.allQualificationsOfEducation(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Creates a new qualification
          * @param {Qualification} qualification New qualification to be created
          * @param {*} [options] Override http request option.
@@ -3049,6 +3104,18 @@ export class QualificationApi extends BaseAPI {
      */
     public allQualifications(options?: AxiosRequestConfig) {
         return QualificationApiFp(this.configuration).allQualifications(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns all possible qualifications of specific education
+     * @param {number} id Id of education
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof QualificationApi
+     */
+    public allQualificationsOfEducation(id: number, options?: AxiosRequestConfig) {
+        return QualificationApiFp(this.configuration).allQualificationsOfEducation(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3212,40 +3279,6 @@ export const RequirementApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
-         * @summary Returns all possible qualifications of specific education
-         * @param {number} id Id of education
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        allQualificationsOfEducation: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('allQualificationsOfEducation', 'id', id)
-            const localVarPath = `/education/{id}/qualification`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Removes a possible educations for specific qualification
          * @param {number} qualificationId Id of qualification
          * @param {number} educationId Id of education
@@ -3367,17 +3400,6 @@ export const RequirementApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Returns all possible qualifications of specific education
-         * @param {number} id Id of education
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async allQualificationsOfEducation(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.allQualificationsOfEducation(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Removes a possible educations for specific qualification
          * @param {number} qualificationId Id of qualification
          * @param {number} educationId Id of education
@@ -3441,16 +3463,6 @@ export const RequirementApiFactory = function (configuration?: Configuration, ba
          */
         allEducationsOfQualification(id: number, options?: any): AxiosPromise<Array<number>> {
             return localVarFp.allEducationsOfQualification(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Returns all possible qualifications of specific education
-         * @param {number} id Id of education
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        allQualificationsOfEducation(id: number, options?: any): AxiosPromise<Array<number>> {
-            return localVarFp.allQualificationsOfEducation(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -3520,18 +3532,6 @@ export class RequirementApi extends BaseAPI {
      */
     public allEducationsOfQualification(id: number, options?: AxiosRequestConfig) {
         return RequirementApiFp(this.configuration).allEducationsOfQualification(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Returns all possible qualifications of specific education
-     * @param {number} id Id of education
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RequirementApi
-     */
-    public allQualificationsOfEducation(id: number, options?: AxiosRequestConfig) {
-        return RequirementApiFp(this.configuration).allQualificationsOfEducation(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
