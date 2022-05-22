@@ -18,10 +18,10 @@ data class Qualification(
     val id: Long? = null,
 
     @field:JsonProperty("name", required = true)
-    val name: String,
+    var name: String,
 
     @field:JsonProperty("description", required = true)
-    val description: String,
+    var description: String,
 
     @field:ManyToMany(cascade = [CascadeType.ALL])
     @field:JsonIgnore
