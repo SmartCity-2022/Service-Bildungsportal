@@ -1,31 +1,53 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.assigners.QualificationAssigner
 import com.smartcity.education.backend.models.Qualification
 import com.smartcity.education.backend.models.QualificationProperties
-import org.springframework.http.HttpStatus
+import com.smartcity.education.backend.repositories.EducationRepository
+import com.smartcity.education.backend.repositories.QualificationRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.ResponseEntity
-
-import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
-
+import org.springframework.web.bind.annotation.*
+import java.net.URI
 import javax.validation.Valid
-
-import kotlin.collections.List
 
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
 class QualificationApiController {
+    @Autowired
+    private val repository: QualificationRepository? = null
+    @Autowired
+    private val educationRepository: EducationRepository? = null
+    @Autowired
+    private val assigner: QualificationAssigner? = null
+
     @RequestMapping(
         method = [RequestMethod.POST],
         value = ["/qualification/{id}/education"],
         consumes = ["application/json"]
     )
     fun addEducationsOfQualification(
-        @PathVariable("id") id: Int,
-        @Valid @RequestBody requestBody: List<Int>
+        @PathVariable("id") id: Long,
+        @Valid @RequestBody requestBody: List<Long>
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val qualification = repository?.findByIdOrNull(id)
+        val educations = educationRepository?.findAllById(requestBody)
+
+        return qualification?.let {
+            educations?.forEach { e -> e.qualifications.add(it) }
+            it.educations.addAll(educations ?: emptyList())
+            repository?.save(it)
+
+            ResponseEntity
+                .created(URI("/education/$id/qualification"))
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -34,9 +56,17 @@ class QualificationApiController {
         produces = ["application/json"]
     )
     fun allEducationsOfQualification(
-        @PathVariable("id") id: Int
-    ): ResponseEntity<List<Int>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        @PathVariable("id") id: Long
+    ): ResponseEntity<List<Long>> {
+        val qualification = repository?.findByIdOrNull(id)
+
+        return qualification?.let {
+            ResponseEntity
+                .ok(it.educations.map { it.id ?: 0 })
+        } ?:
+        ResponseEntity
+            .notFound()
+            .build()
     }
 
     @RequestMapping(
@@ -44,8 +74,11 @@ class QualificationApiController {
         value = ["/qualification"],
         produces = ["application/json"]
     )
-    fun allQualifications(): ResponseEntity<List<Qualification>> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    fun allQualifications(): ResponseEntity<Iterable<Qualification>> {
+        val qualifications = repository?.findAll()
+
+        return ResponseEntity
+            .ok(qualifications)
     }
 
     @RequestMapping(
@@ -56,7 +89,11 @@ class QualificationApiController {
     fun createQualification(
         @Valid @RequestBody qualification: Qualification
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        repository?.save(qualification)
+
+        return ResponseEntity
+            .created(URI("/qualification/${qualification.id}"))
+            .build()
     }
 
     @RequestMapping(
@@ -64,10 +101,22 @@ class QualificationApiController {
         value = ["/qualification/{qualificationId}/education/{educationId}"]
     )
     fun removeEducationsOfQualification(
-        @PathVariable("qualificationId") qualificationId: Int,
-        @PathVariable("educationId") educationId: Int
+        @PathVariable("qualificationId") qualificationId: Long,
+        @PathVariable("educationId") educationId: Long
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val qualification = repository?.findByIdOrNull(qualificationId)
+
+        return qualification?.let {
+            it.educations.removeIf { it.id == educationId }
+            repository?.save(it)
+
+            ResponseEntity
+                .ok()
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -76,9 +125,17 @@ class QualificationApiController {
         produces = ["application/json"]
     )
     fun singleQualification(
-        @PathVariable("id") id: Int
+        @PathVariable("id") id: Long
     ): ResponseEntity<Qualification> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val qualification = repository?.findByIdOrNull(id)
+
+        return qualification?.let {
+            ResponseEntity
+                .ok(it)
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 
     @RequestMapping(
@@ -87,9 +144,21 @@ class QualificationApiController {
         consumes = ["application/json"]
     )
     fun updateQualification(
-        @PathVariable("id") id: Int,
+        @PathVariable("id") id: Long,
         @Valid @RequestBody qualificationProperties: QualificationProperties
     ): ResponseEntity<Unit> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        val qualification = repository?.findByIdOrNull(id)
+
+        return qualification?.let {
+            assigner?.assign(qualificationProperties, it)
+            repository?.save(it)
+
+            ResponseEntity
+                .ok()
+                .build()
+        } ?:
+            ResponseEntity
+                .notFound()
+                .build()
     }
 }
