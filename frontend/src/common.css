@@ -11,6 +11,15 @@
     background-color: var(--md-blue-300);
 }
 
+.institution-card .card-header {
+    background-color: var(--md-orange-500);
+}
+
+.institution-card .card-body {
+    background-color: var(--md-orange-300);
+}
+
+
 a, .card-header .card-title {
     color: black;
     text-decoration: none;
