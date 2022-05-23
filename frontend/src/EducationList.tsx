@@ -15,11 +15,11 @@ export default function EducationList(props: Props) {
     const formattedElements = props.elements.map((e) =>
         <Card className="education-card">
             <Card.Header>
-                <a href={`/institution/${e.institution.id}`}>{e.institution.name}</a>
+                <a href={`${process.env.PUBLIC_URL}/institution/${e.institution.id}`}>{e.institution.name}</a>
             </Card.Header>
             <Card.Body>
                 <Card.Title>
-                    <a href={`/education/${e.education.id}`}>{e.education.title}</a>
+                    <a href={`${process.env.PUBLIC_URL}/education/${e.education.id}`}>{e.education.title}</a>
                 </Card.Title>
                 <Card.Text>{e.education.description}</Card.Text>
             </Card.Body>
