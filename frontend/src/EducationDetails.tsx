@@ -87,7 +87,7 @@ class EducationDetails extends React.Component<PropsWithParams, State> {
     render() {
         return <Card className="education-card">
             <Card.Header>
-                <a href={`/institution/${this.state.institution?.id}`}>{this.state.institution?.name}</a>
+                <a href={`${process.env.PUBLIC_URL}/institution/${this.state.institution?.id}`}>{this.state.institution?.name}</a>
             </Card.Header>
             <Card.Body>
                 <Card.Title>{this.state.education?.title}</Card.Title>
