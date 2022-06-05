@@ -319,7 +319,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Education'
     post:
-      summary: "Creates a new education for specific education"
+      summary: "Creates a new education for specific location"
       operationId: "createEducationOfLocation"
       tags:
         - education
