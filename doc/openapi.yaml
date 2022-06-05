@@ -23,6 +23,8 @@ tags:
     description: "Access to Grades"
   - name: "requirement"
     description: "Access to Requirements"
+security:
+    - bearerAuth: []
 paths:
   /institution:
     get:
@@ -30,6 +32,7 @@ paths:
       operationId: "allInstitutions"
       tags:
         - institution
+      security: []
       responses:
         "200":
           description: "Successful operation"
@@ -64,6 +67,7 @@ paths:
       operationId: "singleInstitution"
       tags:
         - institution
+      security: []
       parameters:
         - in: path
           name: id
@@ -114,6 +118,7 @@ paths:
       operationId: "allLocationsOfInstitution"
       tags:
         - location
+      security: []
       parameters:
         - in: path
           name: id
@@ -164,6 +169,7 @@ paths:
       operationId: "singleLocation"
       tags:
         - location
+      security: []
       parameters:
         - in: path
           name: id
@@ -302,6 +308,7 @@ paths:
       operationId: "allEducationsOfLocation"
       tags:
         - education
+      security: []
       parameters:
         - in: path
           name: id
@@ -352,6 +359,7 @@ paths:
       operationId: "singleEducation"
       tags:
         - education
+      security: []
       parameters:
         - in: path
           name: id
@@ -404,6 +412,7 @@ paths:
       operationId: "allQualifications"
       tags:
         - qualification
+      security: []
       responses:
         "200":
           description: "Successful operation"
@@ -440,6 +449,7 @@ paths:
       operationId: "singleQualification"
       tags:
         - qualification
+      security: []
       parameters:
         - in: path
           name: id
@@ -702,6 +712,7 @@ paths:
       operationId: "allQualificationsOfEducation"
       tags:
         - qualification
+      security: []
       parameters:
         - in: path
           name: id
@@ -778,6 +789,7 @@ paths:
       operationId: "allEducationsOfQualification"
       tags:
         - requirement
+      security: []
       parameters:
         - in: path
           name: id
@@ -1254,3 +1266,8 @@ components:
         - required:
             - grade
             - date
+  securitySchemes:
+    bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
