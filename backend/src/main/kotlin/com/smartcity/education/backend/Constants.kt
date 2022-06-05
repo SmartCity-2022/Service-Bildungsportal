@@ -8,4 +8,15 @@ object Constants {
         const val hello = "service.hello"
         const val world = "service.world"
     }
+
+    object Authorization {
+        const val header = "Authorization"
+        const val bearer = "Bearer"
+    }
+
+    object Authorities {
+        const val admin = "Admin"
+        const val institution = "Institution"
+        const val student = "Student"
+    }
 }
