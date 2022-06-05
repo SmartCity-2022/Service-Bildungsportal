@@ -1,6 +1,8 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.Constants
 import com.smartcity.education.backend.assigners.StudentAssigner
+import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.*
 import com.smartcity.education.backend.repositories.StudentRepository
 import org.junit.jupiter.api.Assertions
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.context.SecurityContextHolder
 import java.time.LocalDateTime
 import java.util.*
 
@@ -20,6 +23,9 @@ class StudentApiControllerTests {
 
     @MockBean
     private val assigner: StudentAssigner? = null
+
+    @MockBean
+    private val authUtil: AuthUtil? = null
 
     @Autowired
     private val sut: StudentApiController? = null
@@ -70,6 +76,7 @@ class StudentApiControllerTests {
         )
 
         `when`(repository?.findById(id)).thenReturn(Optional.empty())
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), id)).thenReturn(true)
 
         val result = sut?.createMatriculationOfStudent(id, matriculation)
         Assertions.assertEquals(result?.statusCode, HttpStatus.NOT_FOUND)
@@ -89,12 +96,33 @@ class StudentApiControllerTests {
         val id = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), id)).thenReturn(true)
 
         val result = sut?.createMatriculationOfStudent(id, matriculation)
         Assertions.assertEquals(result?.statusCode, HttpStatus.CREATED)
 
         verify(repository, times(1))?.findById(id)
         verify(repository, times(1))?.save(obj)
+    }
+
+    @Test
+    fun testCreateMatriculationOfStudent_NoAuthority() {
+        val obj = Student(
+                name = ""
+        )
+        val matriculation = Matriculation(
+                date = LocalDateTime.now()
+        )
+        val id = 0L
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), id)).thenReturn(false)
+
+        val result = sut?.createMatriculationOfStudent(id, matriculation)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        verify(repository, never())?.findById(id)
+        verify(repository, never())?.save(obj)
     }
 
     @Test
@@ -107,6 +135,20 @@ class StudentApiControllerTests {
         Assertions.assertEquals(result?.statusCode, HttpStatus.CREATED)
 
         verify(repository, times(1))?.save(obj)
+    }
+
+    @Test
+    fun testCreateStudent_AlreadyExists() {
+        val obj = Student(
+                name = ""
+        )
+
+        `when`(authUtil?.hasAuthority(SecurityContextHolder.getContext(), Constants.Authorities.student)).thenReturn(true)
+
+        val result = sut?.createStudent(obj)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.BAD_REQUEST)
+
+        verify(repository, never())?.save(obj)
     }
 
     @Test
@@ -143,6 +185,7 @@ class StudentApiControllerTests {
         val id = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.empty())
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), id)).thenReturn(true)
 
         val result = sut?.updateStudent(id, prop)
         Assertions.assertEquals(result?.statusCode, HttpStatus.NOT_FOUND)
@@ -160,6 +203,7 @@ class StudentApiControllerTests {
         val id = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), id)).thenReturn(true)
 
         val result = sut?.updateStudent(id, prop)
         Assertions.assertEquals(result?.statusCode, HttpStatus.OK)
@@ -168,5 +212,25 @@ class StudentApiControllerTests {
         inOrder.verify(repository, times(1))?.findById(id)
         inOrder.verify(assigner, times(1))?.assign(prop, obj)
         inOrder.verify(repository, times(1))?.save(obj)
+    }
+
+    @Test
+    fun testUpdateStudent_NoAuthority() {
+        val obj = Student(
+                name = ""
+        )
+        val prop = StudentProperties()
+        val id = 0L
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), id)).thenReturn(false)
+
+        val result = sut?.updateStudent(id, prop)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        val inOrder = inOrder(repository, assigner)
+        inOrder.verify(repository, never())?.findById(id)
+        inOrder.verify(assigner, never())?.assign(prop, obj)
+        inOrder.verify(repository, never())?.save(obj)
     }
 }

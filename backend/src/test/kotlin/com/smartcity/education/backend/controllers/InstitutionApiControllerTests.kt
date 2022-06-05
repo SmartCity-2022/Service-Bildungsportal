@@ -1,6 +1,7 @@
 package com.smartcity.education.backend.controllers
 
 import com.smartcity.education.backend.assigners.InstitutionAssigner
+import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Institution
 import com.smartcity.education.backend.models.InstitutionProperties
 import com.smartcity.education.backend.models.Location
@@ -15,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationContext
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.web.WebAppConfiguration
 import java.util.*
 import kotlin.collections.HashSet
@@ -26,6 +28,9 @@ class InstitutionApiControllerTests {
 
     @MockBean
     private val assigner: InstitutionAssigner? = null
+
+    @MockBean
+    private val authUtil: AuthUtil? = null
 
     @Autowired
     private val sut: InstitutionApiController? = null
@@ -91,6 +96,7 @@ class InstitutionApiControllerTests {
         )
 
         `when`(repository?.findById(id)).thenReturn(Optional.empty())
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), id)).thenReturn(true)
 
         val result = sut?.createLocationOfInstitution(id, location)
         Assertions.assertEquals(result?.statusCode, HttpStatus.NOT_FOUND)
@@ -112,12 +118,35 @@ class InstitutionApiControllerTests {
         val id = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), id)).thenReturn(true)
 
         val result = sut?.createLocationOfInstitution(id, location)
         Assertions.assertEquals(result?.statusCode, HttpStatus.CREATED)
 
         verify(repository, times(1))?.findById(id)
         verify(repository, times(1))?.save(obj)
+    }
+
+    @Test
+    fun testCreateLocationOfInstitution_NoAuthority() {
+        val obj = Institution(
+                name = ""
+        )
+        val location = Location(
+                address = "",
+                city = "",
+                zip = ""
+        )
+        val id = 0L
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), id)).thenReturn(false)
+
+        val result = sut?.createLocationOfInstitution(id, location)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        verify(repository, never())?.findById(id)
+        verify(repository, never())?.save(obj)
     }
 
     @Test
@@ -154,6 +183,7 @@ class InstitutionApiControllerTests {
         val id = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.empty())
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), id)).thenReturn(true)
 
         val result = sut?.updateInstitution(id, prop)
         Assertions.assertEquals(result?.statusCode, HttpStatus.NOT_FOUND)
@@ -171,6 +201,7 @@ class InstitutionApiControllerTests {
         val id = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), id)).thenReturn(true)
 
         val result = sut?.updateInstitution(id, prop)
         Assertions.assertEquals(result?.statusCode, HttpStatus.OK)
@@ -179,5 +210,25 @@ class InstitutionApiControllerTests {
         inOrder.verify(repository, times(1))?.findById(id)
         inOrder.verify(assigner, times(1))?.assign(prop, obj)
         inOrder.verify(repository, times(1))?.save(obj)
+    }
+
+    @Test
+    fun testUpdateInstitution_NoAuthority() {
+        val obj = Institution(
+                name = ""
+        )
+        val prop = InstitutionProperties()
+        val id = 0L
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), id)).thenReturn(false)
+
+        val result = sut?.updateInstitution(id, prop)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        val inOrder = inOrder(repository, assigner)
+        inOrder.verify(repository, never())?.findById(id)
+        inOrder.verify(assigner, never())?.assign(prop, obj)
+        inOrder.verify(repository, never())?.save(obj)
     }
 }
