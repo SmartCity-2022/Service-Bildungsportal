@@ -5,7 +5,6 @@ import com.smartcity.education.backend.models.Qualification
 import com.smartcity.education.backend.models.QualificationProperties
 import com.smartcity.education.backend.repositories.EducationRepository
 import com.smartcity.education.backend.repositories.QualificationRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -16,14 +15,11 @@ import javax.validation.Valid
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class QualificationApiController {
-    @Autowired
-    private val repository: QualificationRepository? = null
-    @Autowired
-    private val educationRepository: EducationRepository? = null
-    @Autowired
-    private val assigner: QualificationAssigner? = null
-
+class QualificationApiController(
+        private val repository: QualificationRepository,
+        private val educationRepository: EducationRepository,
+        private val assigner: QualificationAssigner
+) {
     @RequestMapping(
         method = [RequestMethod.POST],
         value = ["/qualification/{id}/education"],
@@ -33,13 +29,13 @@ class QualificationApiController {
         @PathVariable("id") id: Long,
         @Valid @RequestBody requestBody: List<Long>
     ): ResponseEntity<Unit> {
-        val qualification = repository?.findByIdOrNull(id)
-        val educations = educationRepository?.findAllById(requestBody)
+        val qualification = repository.findByIdOrNull(id)
+        val educations = educationRepository.findAllById(requestBody)
 
         return qualification?.let {
-            educations?.forEach { e -> e.qualifications.add(it) }
-            it.educations.addAll(educations ?: emptyList())
-            repository?.save(it)
+            educations.forEach { e -> e.qualifications.add(it) }
+            it.educations.addAll(educations)
+            repository.save(it)
 
             ResponseEntity
                 .created(URI("/education/$id/qualification"))
@@ -58,11 +54,11 @@ class QualificationApiController {
     fun allEducationsOfQualification(
         @PathVariable("id") id: Long
     ): ResponseEntity<List<Long>> {
-        val qualification = repository?.findByIdOrNull(id)
+        val qualification = repository.findByIdOrNull(id)
 
         return qualification?.let {
             ResponseEntity
-                .ok(it.educations.map { it.id ?: 0 })
+                .ok(it.educations.map { e -> e.id ?: 0 })
         } ?:
         ResponseEntity
             .notFound()
@@ -75,7 +71,7 @@ class QualificationApiController {
         produces = ["application/json"]
     )
     fun allQualifications(): ResponseEntity<Iterable<Qualification>> {
-        val qualifications = repository?.findAll()
+        val qualifications = repository.findAll()
 
         return ResponseEntity
             .ok(qualifications)
@@ -89,7 +85,7 @@ class QualificationApiController {
     fun createQualification(
         @Valid @RequestBody qualification: Qualification
     ): ResponseEntity<Unit> {
-        repository?.save(qualification)
+        repository.save(qualification)
 
         return ResponseEntity
             .created(URI("/qualification/${qualification.id}"))
@@ -104,11 +100,11 @@ class QualificationApiController {
         @PathVariable("qualificationId") qualificationId: Long,
         @PathVariable("educationId") educationId: Long
     ): ResponseEntity<Unit> {
-        val qualification = repository?.findByIdOrNull(qualificationId)
+        val qualification = repository.findByIdOrNull(qualificationId)
 
         return qualification?.let {
-            it.educations.removeIf { it.id == educationId }
-            repository?.save(it)
+            it.educations.removeIf { e -> e.id == educationId }
+            repository.save(it)
 
             ResponseEntity
                 .ok()
@@ -127,7 +123,7 @@ class QualificationApiController {
     fun singleQualification(
         @PathVariable("id") id: Long
     ): ResponseEntity<Qualification> {
-        val qualification = repository?.findByIdOrNull(id)
+        val qualification = repository.findByIdOrNull(id)
 
         return qualification?.let {
             ResponseEntity
@@ -147,11 +143,11 @@ class QualificationApiController {
         @PathVariable("id") id: Long,
         @Valid @RequestBody qualificationProperties: QualificationProperties
     ): ResponseEntity<Unit> {
-        val qualification = repository?.findByIdOrNull(id)
+        val qualification = repository.findByIdOrNull(id)
 
         return qualification?.let {
-            assigner?.assign(qualificationProperties, it)
-            repository?.save(it)
+            assigner.assign(qualificationProperties, it)
+            repository.save(it)
 
             ResponseEntity
                 .ok()

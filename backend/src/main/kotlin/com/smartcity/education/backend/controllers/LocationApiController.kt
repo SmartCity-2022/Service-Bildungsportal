@@ -8,33 +8,24 @@ import com.smartcity.education.backend.models.Location
 import com.smartcity.education.backend.models.LocationProperties
 import com.smartcity.education.backend.repositories.LocationRepository
 import org.springframework.amqp.rabbit.core.RabbitTemplate
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
-
-import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 import java.net.URI
-
 import javax.validation.Valid
-
-import kotlin.collections.List
 
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class LocationApiController(private val authUtil: AuthUtil) {
-    @Autowired
-    private val repository: LocationRepository? = null
-
-    @Autowired
-    private val assigner: LocationAssigner? = null
-
-    @Autowired
-    private val template: RabbitTemplate? = null
-
+class LocationApiController(
+        private val repository: LocationRepository,
+        private val assigner: LocationAssigner,
+        private val template: RabbitTemplate,
+        private val authUtil: AuthUtil
+) {
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/location/{id}/education"],
@@ -43,7 +34,7 @@ class LocationApiController(private val authUtil: AuthUtil) {
     fun allEducationsOfLocation(
         @PathVariable("id") id: Long
     ): ResponseEntity<List<Education>> {
-        val location = repository?.findByIdOrNull(id)
+        val location = repository.findByIdOrNull(id)
 
         return location?.let {
             ResponseEntity
@@ -63,7 +54,7 @@ class LocationApiController(private val authUtil: AuthUtil) {
         @PathVariable("id") id: Long,
         @Valid @RequestBody education: Education
     ): ResponseEntity<Unit> {
-        val location = repository?.findByIdOrNull(id)
+        val location = repository.findByIdOrNull(id)
 
         return location?.let {
             if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), it.institutionId ?: -1)) {
@@ -74,13 +65,13 @@ class LocationApiController(private val authUtil: AuthUtil) {
 
             education.location = it
             location.educations.add(education)
-            val created = repository?.save(it)
+            val created = repository.save(it)
 
-            created?.educations?.last()?.id?.let { id ->
-                template?.convertAndSend(
-                    Constants.exchange,
-                    Constants.RoutingKeys.created,
-                    id.toString()
+            created.educations.last().id?.let { id ->
+                template.convertAndSend(
+                        Constants.exchange,
+                        Constants.RoutingKeys.created,
+                        id.toString()
                 )
             }
 
@@ -101,7 +92,7 @@ class LocationApiController(private val authUtil: AuthUtil) {
     fun singleLocation(
         @PathVariable("id") id: Long,
     ): ResponseEntity<Location> {
-        val location = repository?.findByIdOrNull(id)
+        val location = repository.findByIdOrNull(id)
 
         return location?.let {
             ResponseEntity
@@ -121,7 +112,7 @@ class LocationApiController(private val authUtil: AuthUtil) {
         @PathVariable("id") id: Long,
         @Valid @RequestBody locationProperties: LocationProperties
     ): ResponseEntity<Unit> {
-        val location = repository?.findByIdOrNull(id)
+        val location = repository.findByIdOrNull(id)
 
         return location?.let {
             if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), it.institutionId ?: -1)) {
@@ -130,8 +121,8 @@ class LocationApiController(private val authUtil: AuthUtil) {
                         .build()
             }
 
-            assigner?.assign(locationProperties, it)
-            repository?.save(it)
+            assigner.assign(locationProperties, it)
+            repository.save(it)
 
             ResponseEntity
                 .ok()

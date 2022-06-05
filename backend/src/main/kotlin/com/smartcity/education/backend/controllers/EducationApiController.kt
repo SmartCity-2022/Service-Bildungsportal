@@ -9,33 +9,26 @@ import com.smartcity.education.backend.models.Matriculation
 import com.smartcity.education.backend.repositories.EducationRepository
 import com.smartcity.education.backend.repositories.QualificationRepository
 import com.smartcity.education.backend.repositories.StudentRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
-
-import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 import java.net.URI
 import java.time.LocalDateTime
-
 import javax.validation.Valid
-
-import kotlin.collections.List
 
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class EducationApiController(private val authUtil: AuthUtil) {
-    @Autowired
-    private val repository: EducationRepository? = null
-    @Autowired
-    private val qualificationRepository: QualificationRepository? = null
-    @Autowired
-    private val studentRepository: StudentRepository? = null
-    @Autowired
-    private val assigner: Assigner<EducationProperties, Education>? = null
+class EducationApiController(
+        private val repository: EducationRepository,
+        private val qualificationRepository: QualificationRepository,
+        private val studentRepository: StudentRepository,
+        private val assigner: Assigner<EducationProperties, Education>,
+        private val authUtil: AuthUtil
+) {
 
     @RequestMapping(
         method = [RequestMethod.POST],
@@ -46,8 +39,8 @@ class EducationApiController(private val authUtil: AuthUtil) {
         @PathVariable("id") id: Long,
         @Valid @RequestBody requestBody: List<Long>
     ): ResponseEntity<Unit> {
-        val education = repository?.findByIdOrNull(id)
-        val qualifications = qualificationRepository?.findAllById(requestBody)
+        val education = repository.findByIdOrNull(id)
+        val qualifications = qualificationRepository.findAllById(requestBody)
 
         return education?.let {
             if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), education.location?.institutionId ?: -1)) {
@@ -56,9 +49,9 @@ class EducationApiController(private val authUtil: AuthUtil) {
                         .build()
             }
 
-            qualifications?.forEach { q -> q.educations.add(it) }
-            it.qualifications.addAll(qualifications ?: emptyList())
-            repository?.save(it)
+            qualifications.forEach { q -> q.educations.add(it) }
+            it.qualifications.addAll(qualifications)
+            repository.save(it)
 
             ResponseEntity
                 .created(URI("/education/$id/qualification"))
@@ -77,7 +70,7 @@ class EducationApiController(private val authUtil: AuthUtil) {
     fun allAssessmentsOfEducation(
         @PathVariable("id") id: Long
     ): ResponseEntity<List<Assessment>> {
-        val education = repository?.findByIdOrNull(id)
+        val education = repository.findByIdOrNull(id)
 
         return education?.let {
             ResponseEntity
@@ -96,7 +89,7 @@ class EducationApiController(private val authUtil: AuthUtil) {
     fun allMatriculationsOfEducation(
         @PathVariable("id") id: Long
     ): ResponseEntity<List<Matriculation>> {
-        val education = repository?.findByIdOrNull(id)
+        val education = repository.findByIdOrNull(id)
 
         return education?.let {
             ResponseEntity
@@ -115,11 +108,11 @@ class EducationApiController(private val authUtil: AuthUtil) {
     fun allQualificationsOfEducation(
         @PathVariable("id") id: Long
     ): ResponseEntity<List<Long>> {
-        val education = repository?.findByIdOrNull(id)
+        val education = repository.findByIdOrNull(id)
 
         return education?.let {
             ResponseEntity
-                .ok(it.qualifications.map { it.id ?: 0 })
+                .ok(it.qualifications.map { q -> q.id ?: 0 })
         } ?:
             ResponseEntity
                 .notFound()
@@ -135,7 +128,7 @@ class EducationApiController(private val authUtil: AuthUtil) {
         @PathVariable("id") id: Long,
         @Valid @RequestBody assessment: Assessment
     ): ResponseEntity<Unit> {
-        val education = repository?.findByIdOrNull(id)
+        val education = repository.findByIdOrNull(id)
 
         return education?.let {
             if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), education.location?.institutionId ?: -1)) {
@@ -146,7 +139,7 @@ class EducationApiController(private val authUtil: AuthUtil) {
 
             assessment.education = it
             it.assessments.add(assessment)
-            repository?.save(it)
+            repository.save(it)
 
             ResponseEntity
                 .created(URI("/assessment/${assessment.id}"))
@@ -172,19 +165,19 @@ class EducationApiController(private val authUtil: AuthUtil) {
                     .build()
         }
 
-        val education = repository?.findByIdOrNull(id)
+        val education = repository.findByIdOrNull(id)
 
         return education?.let {
-            val student = studentRepository?.findByIdOrNull(studentId)
+            val student = studentRepository.findByIdOrNull(studentId)
             val matriculation = Matriculation(
                 education = it,
                 student = student,
                 date = LocalDateTime.now()
             )
 
-            student?.let { it.matriculations.add(matriculation) }
+            student?.matriculations?.add(matriculation)
             it.matriculations.add(matriculation)
-            repository?.save(it)
+            repository.save(it)
 
             ResponseEntity
                 .created(URI("/matriculation/${matriculation.id}"))
@@ -203,7 +196,7 @@ class EducationApiController(private val authUtil: AuthUtil) {
         @PathVariable("educationId") educationId: Long,
         @PathVariable("qualificationId") qualificationId: Long
     ): ResponseEntity<Unit> {
-        val education = repository?.findByIdOrNull(educationId)
+        val education = repository.findByIdOrNull(educationId)
 
         return education?.let {
             if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), education.location?.institutionId ?: -1)) {
@@ -212,8 +205,8 @@ class EducationApiController(private val authUtil: AuthUtil) {
                         .build()
             }
 
-            it.qualifications.removeIf { it.id == qualificationId }
-            repository?.save(it)
+            it.qualifications.removeIf { q -> q.id == qualificationId }
+            repository.save(it)
 
             ResponseEntity
                 .ok()
@@ -232,7 +225,7 @@ class EducationApiController(private val authUtil: AuthUtil) {
     fun singleEducation(
         @PathVariable("id") id: Long
     ): ResponseEntity<Education> {
-        val education = repository?.findByIdOrNull(id)
+        val education = repository.findByIdOrNull(id)
 
         return education?.let {
             ResponseEntity
@@ -252,7 +245,7 @@ class EducationApiController(private val authUtil: AuthUtil) {
         @PathVariable("id") id: Long,
         @Valid @RequestBody educationProperties: EducationProperties
     ): ResponseEntity<Unit> {
-        val education = repository?.findByIdOrNull(id)
+        val education = repository.findByIdOrNull(id)
 
         return education?.let {
             if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), education.location?.institutionId  ?: -1)) {
@@ -260,9 +253,8 @@ class EducationApiController(private val authUtil: AuthUtil) {
                         .status(HttpStatus.FORBIDDEN)
                         .build()
             }
-
-            assigner?.assign(educationProperties, it)
-            repository?.save(it)
+            assigner.assign(educationProperties, it)
+            repository.save(it)
 
             ResponseEntity
                 .ok()
