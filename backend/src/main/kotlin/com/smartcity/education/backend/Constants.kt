@@ -5,5 +5,7 @@ object Constants {
 
     object RoutingKeys {
         const val created = "service.education.created"
+        const val hello = "service.hello"
+        const val world = "service.world"
     }
 }
