@@ -1,6 +1,8 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.Constants
 import com.smartcity.education.backend.assigners.StudentAssigner
+import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Matriculation
 import com.smartcity.education.backend.models.Student
 import com.smartcity.education.backend.models.StudentProperties
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 
 import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
@@ -21,7 +24,7 @@ import kotlin.collections.List
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class StudentApiController {
+class StudentApiController(private val authUtil: AuthUtil) {
     @Autowired
     private val repository: StudentRepository? = null
     @Autowired
@@ -67,6 +70,12 @@ class StudentApiController {
         @PathVariable("id") id: Long,
         @Valid @RequestBody matriculation: Matriculation
     ): ResponseEntity<Unit> {
+        if (!authUtil.hasStudentAuthority(SecurityContextHolder.getContext(), id)) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build()
+        }
+
         val student = repository?.findByIdOrNull(id)
 
         return student?.let {
@@ -91,7 +100,15 @@ class StudentApiController {
     fun createStudent(
         @Valid @RequestBody student: Student
     ): ResponseEntity<Unit> {
+        val context = SecurityContextHolder.getContext()
+        if (authUtil.hasAuthority(context, Constants.Authorities.student)) {
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
         repository?.save(student)
+        authUtil.updateUser(context) { user ->
+            user.student = student
+        }
 
         return ResponseEntity
             .created(URI("/student/${student.id}"))
@@ -126,6 +143,12 @@ class StudentApiController {
         @PathVariable("id") id: Long,
         @Valid @RequestBody studentProperties: StudentProperties
     ): ResponseEntity<Unit> {
+        if (!authUtil.hasStudentAuthority(SecurityContextHolder.getContext(), id)) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build()
+        }
+
         val student = repository?.findByIdOrNull(id)
 
         return student?.let {

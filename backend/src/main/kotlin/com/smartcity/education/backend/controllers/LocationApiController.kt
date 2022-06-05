@@ -2,6 +2,7 @@ package com.smartcity.education.backend.controllers
 
 import com.smartcity.education.backend.Constants
 import com.smartcity.education.backend.assigners.LocationAssigner
+import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Education
 import com.smartcity.education.backend.models.Location
 import com.smartcity.education.backend.models.LocationProperties
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 
 import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
@@ -23,7 +25,7 @@ import kotlin.collections.List
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class LocationApiController {
+class LocationApiController(private val authUtil: AuthUtil) {
     @Autowired
     private val repository: LocationRepository? = null
 
@@ -64,6 +66,12 @@ class LocationApiController {
         val location = repository?.findByIdOrNull(id)
 
         return location?.let {
+            if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), it.institutionId ?: -1)) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .build()
+            }
+
             education.location = it
             location.educations.add(education)
             val created = repository?.save(it)
@@ -116,6 +124,12 @@ class LocationApiController {
         val location = repository?.findByIdOrNull(id)
 
         return location?.let {
+            if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), it.institutionId ?: -1)) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .build()
+            }
+
             assigner?.assign(locationProperties, it)
             repository?.save(it)
 

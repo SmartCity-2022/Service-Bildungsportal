@@ -1,13 +1,17 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.Constants
 import com.smartcity.education.backend.assigners.Assigner
+import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Institution
 import com.smartcity.education.backend.models.InstitutionProperties
 import com.smartcity.education.backend.models.Location
 import com.smartcity.education.backend.repositories.InstitutionRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.net.URI
@@ -16,7 +20,7 @@ import javax.validation.Valid
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class InstitutionApiController {
+class InstitutionApiController(private val authUtil: AuthUtil) {
     @Autowired
     private val repository: InstitutionRepository? = null
 
@@ -78,6 +82,12 @@ class InstitutionApiController {
         @PathVariable("id") id: Long,
         @Valid @RequestBody location: Location
     ): ResponseEntity<Unit> {
+        if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), id)) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build()
+        }
+
         val institution = repository?.findByIdOrNull(id)
 
         return institution?.let {
@@ -122,6 +132,12 @@ class InstitutionApiController {
         @PathVariable("id") id: Long,
         @Valid @RequestBody institutionProperties: InstitutionProperties
     ): ResponseEntity<Unit> {
+        if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), id)) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build()
+        }
+        
         val institution = repository?.findByIdOrNull(id)
 
         return institution?.let {
