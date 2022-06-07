@@ -8,7 +8,8 @@ RUN npm ci
 
 COPY ./ /app/
 
-ENV REACT_APP_BACKEND=https://bildung.smartcity.w-mi.de/api
+ENV REACT_APP_BACKEND=https://bildung.smartcity.w-mi.de/api/
+ENV REACT_APP_MAINHUB=https://mainhub.smartcity.w-mi.de/api/
 
 RUN npm run build
 
