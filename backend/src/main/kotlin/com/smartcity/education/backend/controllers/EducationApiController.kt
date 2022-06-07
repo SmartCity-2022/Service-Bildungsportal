@@ -1,6 +1,7 @@
 package com.smartcity.education.backend.controllers
 
 import com.smartcity.education.backend.assigners.Assigner
+import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Assessment
 import com.smartcity.education.backend.models.Education
 import com.smartcity.education.backend.models.EducationProperties
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 
 import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
@@ -25,7 +27,7 @@ import kotlin.collections.List
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class EducationApiController {
+class EducationApiController(private val authUtil: AuthUtil) {
     @Autowired
     private val repository: EducationRepository? = null
     @Autowired
@@ -48,6 +50,12 @@ class EducationApiController {
         val qualifications = qualificationRepository?.findAllById(requestBody)
 
         return education?.let {
+            if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), education.location?.institutionId ?: -1)) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .build()
+            }
+
             qualifications?.forEach { q -> q.educations.add(it) }
             it.qualifications.addAll(qualifications ?: emptyList())
             repository?.save(it)
@@ -130,6 +138,12 @@ class EducationApiController {
         val education = repository?.findByIdOrNull(id)
 
         return education?.let {
+            if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), education.location?.institutionId ?: -1)) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .build()
+            }
+
             assessment.education = it
             it.assessments.add(assessment)
             repository?.save(it)
@@ -152,6 +166,12 @@ class EducationApiController {
         @PathVariable("id") id: Long,
         @Valid @RequestBody studentId: Long
     ): ResponseEntity<Unit> {
+        if (!authUtil.hasStudentAuthority(SecurityContextHolder.getContext(), studentId)) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .build()
+        }
+
         val education = repository?.findByIdOrNull(id)
 
         return education?.let {
@@ -186,6 +206,12 @@ class EducationApiController {
         val education = repository?.findByIdOrNull(educationId)
 
         return education?.let {
+            if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), education.location?.institutionId ?: -1)) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .build()
+            }
+
             it.qualifications.removeIf { it.id == qualificationId }
             repository?.save(it)
 
@@ -229,6 +255,12 @@ class EducationApiController {
         val education = repository?.findByIdOrNull(id)
 
         return education?.let {
+            if (!authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), education.location?.institutionId  ?: -1)) {
+                return ResponseEntity
+                        .status(HttpStatus.FORBIDDEN)
+                        .build()
+            }
+
             assigner?.assign(educationProperties, it)
             repository?.save(it)
 

@@ -21,6 +21,7 @@ Microservice Bildungsportal
 
 ## Frontend
 
-| Variable            | Beschreibung          |
-|:--------------------|:----------------------|
-| REACT\_APP\_BACKEND | Base-URL des Backends |
+| Variable            | Beschreibung             |
+|:--------------------|:-------------------------|
+| REACT\_APP\_BACKEND | Base-URL des Backends    |
+| REACT\_APP\_MAINHUB | Base-URL der MainHub-API |

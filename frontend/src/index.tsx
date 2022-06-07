@@ -9,6 +9,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {Cookies} from "react-cookie"
+import {isExpired} from "react-jwt";
 
 import Header from "./Header";
 import Overview from './Overview';
@@ -16,9 +18,31 @@ import EducationDetails from "./EducationDetails";
 import InstitutionDetails from "./InstitutionDetails";
 
 import {Configuration} from "./api";
+import axios from "axios";
+
+const getAccessToken = async () => {
+    const cookieAccessToken = "accessToken"
+    const cookies = new Cookies()
+    let accessToken = cookies.get(cookieAccessToken)
+
+    if (accessToken != null && isExpired(accessToken)) {
+        const refreshToken = cookies.get("refreshToken")
+        const mainHubUrl = process.env.REACT_APP_MAINHUB
+
+        await axios.post(`${mainHubUrl}/api/token`, {token: refreshToken})
+            .then((res) => {
+                accessToken = res.data.accessToken
+                cookies.set(cookieAccessToken, accessToken)
+            })
+            .catch(console.error)
+    }
+
+    return accessToken
+}
 
 const config = new Configuration({
-    basePath: process.env.REACT_APP_BACKEND
+    basePath: process.env.REACT_APP_BACKEND,
+    accessToken: getAccessToken()
 })
 
 const root = ReactDOM.createRoot(

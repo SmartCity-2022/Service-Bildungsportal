@@ -1,6 +1,7 @@
 package com.smartcity.education.backend.controllers
 
 import com.smartcity.education.backend.assigners.EducationAssigner
+import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.*
 import com.smartcity.education.backend.repositories.EducationRepository
 import com.smartcity.education.backend.repositories.QualificationRepository
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.context.SecurityContextHolder
 import java.time.LocalDateTime
 import java.util.*
 
@@ -24,6 +26,8 @@ class EducationApiControllerTests {
     private val qualificationRepository: QualificationRepository? = null
     @MockBean
     private val studentRepository: StudentRepository? = null
+    @MockBean
+    private val authUtil: AuthUtil? = null
     @MockBean
     private val assigner: EducationAssigner? = null
     @Autowired
@@ -51,12 +55,31 @@ class EducationApiControllerTests {
         )
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)).thenReturn(true)
 
         val result = sut?.addQualificationsOfEducation(id, emptyList())
         Assertions.assertEquals(result?.statusCode, HttpStatus.CREATED)
 
         verify(repository, times(1))?.findById(id)
         verify(repository, times(1))?.save(obj)
+    }
+
+    @Test
+    fun testAddQualificationsOfEducation_NoAuthority() {
+        val id = 0L
+        val obj = Education(
+                title = "",
+                description = ""
+        )
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)).thenReturn(false)
+
+        val result = sut?.addQualificationsOfEducation(id, emptyList())
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        verify(repository, times(1))?.findById(id)
+        verify(repository, never())?.save(obj)
     }
 
     @Test
@@ -184,6 +207,7 @@ class EducationApiControllerTests {
         )
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)).thenReturn(true)
 
         val result = sut?.createAssessmentOfEducation(id, assessment)
         Assertions.assertEquals(result?.statusCode, HttpStatus.CREATED)
@@ -193,11 +217,33 @@ class EducationApiControllerTests {
     }
 
     @Test
+    fun testCreateAssessmentOfEducation_NoAuthority() {
+        val id = 0L
+        val obj = Education(
+                title = "",
+                description = ""
+        )
+        val assessment = Assessment(
+                title = ""
+        )
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)).thenReturn(false)
+
+        val result = sut?.createAssessmentOfEducation(id, assessment)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        verify(repository, times(1))?.findById(id)
+        verify(repository, never())?.save(obj)
+    }
+
+    @Test
     fun testCreateMatriculationOfEducation_DoesNotExist() {
         val id = 0L
         val studentId = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.empty())
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), studentId)).thenReturn(true)
 
         val result = sut?.createMatriculationOfEducation(id, studentId)
         Assertions.assertEquals(result?.statusCode, HttpStatus.NOT_FOUND)
@@ -216,12 +262,32 @@ class EducationApiControllerTests {
         val studentId = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), studentId)).thenReturn(true)
 
         val result = sut?.createMatriculationOfEducation(id, studentId)
         Assertions.assertEquals(result?.statusCode, HttpStatus.CREATED)
 
         verify(repository, times(1))?.findById(id)
         verify(repository, times(1))?.save(obj)
+    }
+
+    @Test
+    fun testCreateMatriculationOfEducation_NoAuthority() {
+        val id = 0L
+        val obj = Education(
+                title = "",
+                description = ""
+        )
+        val studentId = 0L
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), studentId)).thenReturn(false)
+
+        val result = sut?.createMatriculationOfEducation(id, studentId)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        verify(repository, never())?.findById(id)
+        verify(repository, never())?.save(obj)
     }
 
     @Test
@@ -247,12 +313,32 @@ class EducationApiControllerTests {
         val qualificationId = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)).thenReturn(true)
 
         val result = sut?.removeQualificationsOfEducation(id, qualificationId)
         Assertions.assertEquals(result?.statusCode, HttpStatus.OK)
 
         verify(repository, times(1))?.findById(id)
         verify(repository, times(1))?.save(obj)
+    }
+
+    @Test
+    fun testRemoveQualificationsOfEducation_NoAuthority() {
+        val id = 0L
+        val obj = Education(
+                title = "",
+                description = ""
+        )
+        val qualificationId = 0L
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)).thenReturn(false)
+
+        val result = sut?.removeQualificationsOfEducation(id, qualificationId)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        verify(repository, times(1))?.findById(id)
+        verify(repository, never())?.save(obj)
     }
 
     @Test
@@ -308,6 +394,7 @@ class EducationApiControllerTests {
         val prop = EducationProperties()
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)).thenReturn(true)
 
         val result = sut?.updateEducationOfLocation(id, prop)
         Assertions.assertEquals(result?.statusCode, HttpStatus.OK)
@@ -316,4 +403,26 @@ class EducationApiControllerTests {
         inOrder.verify(repository, times(1))?.findById(id)
         inOrder.verify(assigner, times(1))?.assign(prop, obj)
         inOrder.verify(repository, times(1))?.save(obj)
-    }}
+    }
+
+    @Test
+    fun testUpdateEducationOfLocation_NoAuthority() {
+        val id = 0L
+        val obj = Education(
+                title = "",
+                description = ""
+        )
+        val prop = EducationProperties()
+
+        `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(authUtil?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)).thenReturn(false)
+
+        val result = sut?.updateEducationOfLocation(id, prop)
+        Assertions.assertEquals(result?.statusCode, HttpStatus.FORBIDDEN)
+
+        val inOrder = inOrder(repository, assigner)
+        inOrder.verify(repository, times(1))?.findById(id)
+        inOrder.verify(assigner, never())?.assign(prop, obj)
+        inOrder.verify(repository, never())?.save(obj)
+    }
+}
