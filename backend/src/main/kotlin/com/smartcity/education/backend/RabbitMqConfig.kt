@@ -23,7 +23,7 @@ class RabbitMqConfig {
 
     @Bean
     fun topicBinding(worldQueue: Queue): Declarables {
-        val exchange = TopicExchange(Constants.exchange, false, false)
+        val exchange = TopicExchange(Constants.exchange, true, false)
 
         val createdQueue = AnonymousQueue()
         val helloQueue = AnonymousQueue()
