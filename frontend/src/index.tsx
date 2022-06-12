@@ -29,7 +29,7 @@ const getAccessToken = async () => {
         const refreshToken = cookies.get("refreshToken")
         const mainHubUrl = process.env.REACT_APP_MAINHUB
 
-        await axios.post(`${mainHubUrl}/api/token`, {token: refreshToken})
+        await axios.post(`${mainHubUrl}/token`, {token: refreshToken})
             .then((res) => {
                 accessToken = res.data.accessToken
                 cookies.set(cookieAccessToken, accessToken)
