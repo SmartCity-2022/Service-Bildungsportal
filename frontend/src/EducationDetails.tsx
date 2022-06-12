@@ -5,11 +5,12 @@ import {
     EducationApi,
     Institution,
     InstitutionApi,
-    LocationApi, Qualification,
-    QualificationApi
+    LocationApi, Matriculation, MatriculationApi, Qualification,
+    QualificationApi, User, UserApi
 } from "./api";
-import {Card} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
 import {useParams} from "react-router-dom";
+import {toast} from "react-hot-toast";
 
 interface Props {
     config: Configuration
@@ -22,17 +23,24 @@ interface PropsWithParams extends Props {
 interface State {
     institution: Institution | null
     education: Education | null
-    qualifications: Array<Qualification>
+    qualifications: Array<Qualification>,
+    me: User | null,
+    matriculations: Array<Matriculation>
 }
 
 class EducationDetails extends React.Component<PropsWithParams, State> {
+    matriculationApi: MatriculationApi
+
     constructor(props: PropsWithParams) {
         super(props);
         this.state = {
             institution: null,
             education: null,
-            qualifications: []
+            qualifications: [],
+            me: null,
+            matriculations: []
         }
+        this.matriculationApi = new MatriculationApi(this.props.config)
     }
 
     async componentDidMount() {
@@ -40,6 +48,7 @@ class EducationDetails extends React.Component<PropsWithParams, State> {
         const locationApi = new LocationApi(this.props.config)
         const institutionApi = new InstitutionApi(this.props.config)
         const qualificationApi = new QualificationApi(this.props.config)
+        const userApi = new UserApi(this.props.config)
 
         const education = await educationApi
             .singleEducation(this.props.id)
@@ -64,11 +73,21 @@ class EducationDetails extends React.Component<PropsWithParams, State> {
             .singleInstitution(location.institutionId!)
             .then((response) => response.data)
 
+        const me = await userApi
+            .me()
+            .then((response) => response.data)
+            .catch((reason) => null)
+
+        const matriculations = await this.matriculationApi
+            .myMatriculations()
+            .then((res) => res.data)
 
         this.setState({
             institution: institution,
             education: education,
-            qualifications: qualifications
+            qualifications: qualifications,
+            me: me,
+            matriculations: matriculations
         })
     }
 
@@ -84,6 +103,33 @@ class EducationDetails extends React.Component<PropsWithParams, State> {
         }
     }
 
+    async matriculate() {
+        if (this.state.education?.id != null && this.state.me?.student?.id != null) {
+            const promise = this.matriculationApi
+                .createMatriculationOfEducation(this.state.education.id, this.state.me.student.id)
+                .then((res) => this.matriculationApi.myMatriculations())
+                .then((res) => res.data)
+
+            const matriculations = await toast.promise(
+                promise, {
+                    loading: 'Einschreiben...',
+                    success: 'Erfolgreich eingeschrieben',
+                    error: 'Fehler beim Einschreiben'
+                })
+
+            this.setState({
+                matriculations: matriculations
+            })
+        } else {
+            toast.error('Einschreibung nicht möglich')
+        }
+    }
+
+    canMatriculate() {
+        return this.state.me !== null
+            && this.state.matriculations.every((m) => m.educationId !== this.props.id)
+    }
+
     render() {
         return <Card className="education-card">
             <Card.Header>
@@ -94,6 +140,7 @@ class EducationDetails extends React.Component<PropsWithParams, State> {
                 <Card.Text>
                     <p>{this.state.education?.description}</p>
                     {this.getQualifications()}
+                    <Button disabled={!this.canMatriculate()} onClick={async event => await this.matriculate()}>Einschreiben</Button>
                 </Card.Text>
             </Card.Body>
         </Card>

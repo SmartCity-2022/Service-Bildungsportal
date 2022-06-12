@@ -19,6 +19,7 @@ import InstitutionDetails from "./InstitutionDetails";
 
 import {Configuration} from "./api";
 import axios from "axios";
+import {Toaster} from "react-hot-toast";
 
 const getAccessToken = async () => {
     const cookieAccessToken = "accessToken"
@@ -50,6 +51,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
+        <Toaster/>
         <Header/>
         <BrowserRouter>
             <Routes>
