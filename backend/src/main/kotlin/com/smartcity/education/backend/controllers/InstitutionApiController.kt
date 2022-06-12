@@ -1,13 +1,11 @@
 package com.smartcity.education.backend.controllers
 
-import com.smartcity.education.backend.Constants
 import com.smartcity.education.backend.assigners.Assigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Institution
 import com.smartcity.education.backend.models.InstitutionProperties
 import com.smartcity.education.backend.models.Location
 import com.smartcity.education.backend.repositories.InstitutionRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,20 +18,18 @@ import javax.validation.Valid
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class InstitutionApiController(private val authUtil: AuthUtil) {
-    @Autowired
-    private val repository: InstitutionRepository? = null
-
-    @Autowired
-    private val assigner: Assigner<InstitutionProperties, Institution>? = null
-
+class InstitutionApiController(
+        private val repository: InstitutionRepository,
+        private val assigner: Assigner<InstitutionProperties, Institution>,
+        private val authUtil: AuthUtil
+) {
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/institution"],
         produces = ["application/json"]
     )
     fun allInstitutions(): ResponseEntity<Iterable<Institution>> {
-        val results = repository?.findAll()
+        val results = repository.findAll()
 
         return ResponseEntity
             .ok(results)
@@ -47,7 +43,7 @@ class InstitutionApiController(private val authUtil: AuthUtil) {
     fun allLocationsOfInstitution(
         @PathVariable("id") id: Long
     ): ResponseEntity<Iterable<Location>> {
-        val institution = repository?.findByIdOrNull(id)
+        val institution = repository.findByIdOrNull(id)
 
         return institution?.let {
             ResponseEntity
@@ -66,7 +62,7 @@ class InstitutionApiController(private val authUtil: AuthUtil) {
     fun createInstitution(
         @Valid @RequestBody institution: Institution
     ): ResponseEntity<Unit> {
-        repository?.save(institution)
+        repository.save(institution)
 
         return ResponseEntity
             .created(URI("/institution/${institution.id}"))
@@ -88,12 +84,12 @@ class InstitutionApiController(private val authUtil: AuthUtil) {
                     .build()
         }
 
-        val institution = repository?.findByIdOrNull(id)
+        val institution = repository.findByIdOrNull(id)
 
         return institution?.let {
             location.institution = it
             it.locations.add(location)
-            repository?.save(it)
+            repository.save(it)
 
             ResponseEntity
                 .created(URI("/location/${location.id}"))
@@ -112,7 +108,7 @@ class InstitutionApiController(private val authUtil: AuthUtil) {
     fun singleInstitution(
         @PathVariable("id") id: Long
     ): ResponseEntity<Institution> {
-        val result = repository?.findByIdOrNull(id)
+        val result = repository.findByIdOrNull(id)
 
         return result?.let {
             ResponseEntity
@@ -138,11 +134,11 @@ class InstitutionApiController(private val authUtil: AuthUtil) {
                     .build()
         }
         
-        val institution = repository?.findByIdOrNull(id)
+        val institution = repository.findByIdOrNull(id)
 
         return institution?.let {
-            assigner?.assign(institutionProperties, it)
-            repository?.save(it)
+            assigner.assign(institutionProperties, it)
+            repository.save(it)
             ResponseEntity
                 .ok()
                 .build()

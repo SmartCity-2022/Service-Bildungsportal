@@ -4,6 +4,7 @@ import com.smartcity.education.backend.assigners.QualificationAssigner
 import com.smartcity.education.backend.models.Education
 import com.smartcity.education.backend.models.Qualification
 import com.smartcity.education.backend.models.QualificationProperties
+import com.smartcity.education.backend.repositories.EducationRepository
 import com.smartcity.education.backend.repositories.QualificationRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -18,6 +19,9 @@ import java.util.*
 class QualificationApiControllerTests {
     @MockBean
     private val repository: QualificationRepository? = null
+
+    @MockBean
+    private val educationRepository: EducationRepository? = null
 
     @MockBean
     private val assigner: QualificationAssigner? = null

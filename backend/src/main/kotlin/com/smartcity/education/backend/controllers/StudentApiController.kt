@@ -7,29 +7,23 @@ import com.smartcity.education.backend.models.Matriculation
 import com.smartcity.education.backend.models.Student
 import com.smartcity.education.backend.models.StudentProperties
 import com.smartcity.education.backend.repositories.StudentRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
-
-import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 import java.net.URI
-
 import javax.validation.Valid
-
-import kotlin.collections.List
 
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class StudentApiController(private val authUtil: AuthUtil) {
-    @Autowired
-    private val repository: StudentRepository? = null
-    @Autowired
-    private val assigner: StudentAssigner? = null
-
+class StudentApiController(
+        private val repository: StudentRepository,
+        private val assigner: StudentAssigner,
+        private val authUtil: AuthUtil
+) {
     @RequestMapping(
         method = [RequestMethod.GET],
         value = ["/student/{id}/matriculation"],
@@ -38,7 +32,7 @@ class StudentApiController(private val authUtil: AuthUtil) {
     fun allMatriculationsOfStudent(
         @PathVariable("id") id: Long
     ): ResponseEntity<List<Matriculation>> {
-        val student = repository?.findByIdOrNull(id)
+        val student = repository.findByIdOrNull(id)
 
         return student?.let {
             ResponseEntity
@@ -55,7 +49,7 @@ class StudentApiController(private val authUtil: AuthUtil) {
         produces = ["application/json"]
     )
     fun allStudents(): ResponseEntity<Iterable<Student>> {
-        val students = repository?.findAll()
+        val students = repository.findAll()
 
         return ResponseEntity
             .ok(students)
@@ -76,12 +70,12 @@ class StudentApiController(private val authUtil: AuthUtil) {
                     .build()
         }
 
-        val student = repository?.findByIdOrNull(id)
+        val student = repository.findByIdOrNull(id)
 
         return student?.let {
             matriculation.student = it
             it.matriculations.add(matriculation)
-            repository?.save(it)
+            repository.save(it)
 
             ResponseEntity
                 .created(URI("/matriculation/${matriculation.id}"))
@@ -105,7 +99,7 @@ class StudentApiController(private val authUtil: AuthUtil) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-        repository?.save(student)
+        repository.save(student)
         authUtil.updateUser(context) { user ->
             user.student = student
         }
@@ -123,7 +117,7 @@ class StudentApiController(private val authUtil: AuthUtil) {
     fun singleStudent(
         @PathVariable("id") id: Long
     ): ResponseEntity<Student> {
-        val student = repository?.findByIdOrNull(id)
+        val student = repository.findByIdOrNull(id)
 
         return student?.let {
             ResponseEntity
@@ -149,11 +143,11 @@ class StudentApiController(private val authUtil: AuthUtil) {
                     .build()
         }
 
-        val student = repository?.findByIdOrNull(id)
+        val student = repository.findByIdOrNull(id)
 
         return student?.let {
-            assigner?.assign(studentProperties, it)
-            repository?.save(it)
+            assigner.assign(studentProperties, it)
+            repository.save(it)
             
             ResponseEntity
                 .ok()
