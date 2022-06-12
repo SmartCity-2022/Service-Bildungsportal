@@ -23,6 +23,8 @@ tags:
     description: "Access to Grades"
   - name: "requirement"
     description: "Access to Requirements"
+  - name: "user"
+    description: "Access to User"
 security:
     - bearerAuth: []
 paths:
@@ -1072,6 +1074,40 @@ paths:
           description: "User is not authorized"
         "403":
           description: "Insufficient permissions"
+  /me:
+    get:
+      summary: "Returns information about the current user"
+      operationId: "me"
+      tags:
+        - user
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "401":
+          description: "User is not authorized"
+  /me/matriculation:
+    get:
+      summary: "Returns matriculations of the current user"
+      operationId: "myMatriculations"
+      tags:
+        - matriculation
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                   $ref: '#/components/schemas/Matriculation'
+        "400":
+          description: "User is not a student"
+        "401":
+          description: "User is not authorized"
 components:
   schemas:
     InstitutionProperties:
@@ -1266,6 +1302,18 @@ components:
         - required:
             - grade
             - date
+    User:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+          format: "string"
+        isAdmin:
+          type: "boolean"
+        student:
+          $ref: '#/components/schemas/Student'
+        institution:
+          $ref: '#/components/schemas/Institution'
   securitySchemes:
     bearerAuth:
         type: http
