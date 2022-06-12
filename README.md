@@ -26,3 +26,18 @@ Microservice Bildungsportal
 |:--------------------|:-------------------------|
 | REACT\_APP\_BACKEND | Base-URL des Backends    |
 | REACT\_APP\_MAINHUB | Base-URL der MainHub-API |
+
+## Test
+
+### AuthService
+
+| Variable       | Beschreibung                       |
+|:---------------|:-----------------------------------|
+| PAYLOAD_SECRET | Payload des `service.world` Events |
+
+### Cypress
+
+| Variable             | Beschreibung           |
+|:---------------------|:-----------------------|
+| CYPRESS\_baseUrl     | Base-URL des Frontends |
+| CYPRESS\_accessToken | AccessToken            |
