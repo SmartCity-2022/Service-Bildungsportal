@@ -29,12 +29,6 @@ Microservice Bildungsportal
 
 ## Test
 
-### AuthService
-
-| Variable       | Beschreibung                       |
-|:---------------|:-----------------------------------|
-| PAYLOAD_SECRET | Payload des `service.world` Events |
-
 ### Cypress
 
 | Variable             | Beschreibung           |
