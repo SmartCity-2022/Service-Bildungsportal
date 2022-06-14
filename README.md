@@ -18,6 +18,7 @@ Microservice Bildungsportal
 | RABBITMQ\_USER     | Benutzername auf dem RabbitMQ Server |
 | RABBITMQ\_PASSWORD | Passwort des Benutzers               |
 | RABBITMQ\_EXCHANGE | Name des Topic Exchanges             |
+| MAINHUB            | Base-URL der MainHub-API             |
 
 
 ## Frontend
@@ -25,7 +26,6 @@ Microservice Bildungsportal
 | Variable            | Beschreibung             |
 |:--------------------|:-------------------------|
 | REACT\_APP\_BACKEND | Base-URL des Backends    |
-| REACT\_APP\_MAINHUB | Base-URL der MainHub-API |
 
 ## Test
 

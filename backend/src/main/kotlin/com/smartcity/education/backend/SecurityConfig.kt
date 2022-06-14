@@ -29,7 +29,10 @@ class SecurityConfig: WebSecurityConfigurerAdapter() {
                         .antMatchers(HttpMethod.GET,
                                 "/institution/**",
                                 "/location/**",
-                                "/education/**",
+                                "/education/**"
+                        ).permitAll()
+                        .antMatchers(HttpMethod.POST,
+                                "/token"
                         ).permitAll()
                         .anyRequest().authenticated()
                     .and()
