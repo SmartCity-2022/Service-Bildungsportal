@@ -507,6 +507,37 @@ export interface StudentProperties {
      */
     'name'?: string;
 }
+/**
+ * 
+ * @export
+ * @interface User
+ */
+export interface User {
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    'email'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof User
+     */
+    'isAdmin'?: boolean;
+    /**
+     * 
+     * @type {Student}
+     * @memberof User
+     */
+    'student'?: Student;
+    /**
+     * 
+     * @type {Institution}
+     * @memberof User
+     */
+    'institution'?: Institution;
+}
 
 /**
  * AssessmentApi - axios parameter creator
@@ -2620,6 +2651,40 @@ export const MatriculationApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @summary Returns matriculations of the current user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        myMatriculations: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/me/matriculation`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Updates an matriculation
          * @param {number} id Id of matriculation
          * @param {MatriculationProperties} matriculationProperties Updated matriculation
@@ -2720,6 +2785,16 @@ export const MatriculationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Returns matriculations of the current user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async myMatriculations(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Matriculation>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.myMatriculations(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Updates an matriculation
          * @param {number} id Id of matriculation
          * @param {MatriculationProperties} matriculationProperties Updated matriculation
@@ -2781,6 +2856,15 @@ export const MatriculationApiFactory = function (configuration?: Configuration, 
          */
         createMatriculationOfStudent(id: number, matriculation: Matriculation, options?: any): AxiosPromise<void> {
             return localVarFp.createMatriculationOfStudent(id, matriculation, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns matriculations of the current user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        myMatriculations(options?: any): AxiosPromise<Array<Matriculation>> {
+            return localVarFp.myMatriculations(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2851,6 +2935,17 @@ export class MatriculationApi extends BaseAPI {
      */
     public createMatriculationOfStudent(id: number, matriculation: Matriculation, options?: AxiosRequestConfig) {
         return MatriculationApiFp(this.configuration).createMatriculationOfStudent(id, matriculation, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns matriculations of the current user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MatriculationApi
+     */
+    public myMatriculations(options?: AxiosRequestConfig) {
+        return MatriculationApiFp(this.configuration).myMatriculations(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3996,6 +4091,108 @@ export class StudentApi extends BaseAPI {
      */
     public updateStudent(id: number, studentProperties: StudentProperties, options?: AxiosRequestConfig) {
         return StudentApiFp(this.configuration).updateStudent(id, studentProperties, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * UserApi - axios parameter creator
+ * @export
+ */
+export const UserApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns information about the current user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        me: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UserApi - functional programming interface
+ * @export
+ */
+export const UserApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UserApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns information about the current user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async me(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.me(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * UserApi - factory interface
+ * @export
+ */
+export const UserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UserApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns information about the current user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        me(options?: any): AxiosPromise<User> {
+            return localVarFp.me(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UserApi - object-oriented interface
+ * @export
+ * @class UserApi
+ * @extends {BaseAPI}
+ */
+export class UserApi extends BaseAPI {
+    /**
+     * 
+     * @summary Returns information about the current user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public me(options?: AxiosRequestConfig) {
+        return UserApiFp(this.configuration).me(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

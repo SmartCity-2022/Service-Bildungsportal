@@ -39,4 +39,8 @@ class AuthUtil(
         }
         return false
     }
+
+    fun getUser(context: SecurityContext): User {
+        return context.authentication.principal as User
+    }
 }

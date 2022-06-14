@@ -8,6 +8,16 @@ describe('education details', () => {
             .should('have.text', 'Institution A')
             .should('have.attr', 'href')
         cy.get('.card-title').should('have.text', 'Bildungsangebot 1')
-        cy.get('.card-text').should('have.text', 'Beschreibung Bildungsangebot 1')
+        cy.get('.card-text p').should('have.text', 'Beschreibung Bildungsangebot 1')
+    })
+
+    it('can matriculate', () => {
+        cy.get('.card-text button')
+            .should('have.text', 'Einschreiben')
+            .should('be.enabled')
+            .click()
+
+        cy.get('.card-text button')
+            .should('be.disabled')
     })
 })
