@@ -1278,15 +1278,15 @@ components:
             - date
     GradeProperties:
       type: "object"
-      required:
-        - grade
-        - date
       properties:
         id:
           type: "integer"
           format: "int64"
           readOnly: true
         matriculationId:
+          type: "integer"
+          format: "int64"
+        assessmentId:
           type: "integer"
           format: "int64"
         grade:
