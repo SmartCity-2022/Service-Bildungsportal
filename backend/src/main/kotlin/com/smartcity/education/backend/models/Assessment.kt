@@ -14,14 +14,18 @@ data class Assessment(
     @field:Id
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     @field:JsonProperty("id")
-    val id: Long? = null,
+    var id: Long? = null,
 
     @field:JsonProperty("title")
-    val title: String,
+    var title: String,
 
     @field:ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @field:JsonIgnore
-    var education: Education? = null
+    var education: Education? = null,
+
+    @field:JsonIgnore
+    @field:OneToMany(mappedBy = "assessment", cascade = [CascadeType.ALL])
+    val grades: MutableList<Grade> = ArrayList()
 ) {
     @get:JsonProperty("educationId")
     val educationId: Long? get() = education?.id
