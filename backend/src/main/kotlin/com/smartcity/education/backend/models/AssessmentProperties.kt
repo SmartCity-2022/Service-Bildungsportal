@@ -12,7 +12,7 @@ data class AssessmentProperties(
     val id: Long? = null,
 
     @field:JsonProperty("title")
-    val title: String?,
+    val title: String? = null,
 
     @field:JsonProperty("educationId")
     val educationId: Long? = null

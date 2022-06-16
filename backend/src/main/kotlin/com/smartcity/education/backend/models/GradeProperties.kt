@@ -14,12 +14,15 @@ data class GradeProperties(
     val id: Long? = null,
 
     @field:JsonProperty("grade", required = true)
-    val grade: Float,
+    val grade: Float? = null,
 
     @field:JsonProperty("date", required = true)
     val date: String,
 
     @field:JsonProperty("matriculationId")
-    val matriculationId: Long? = null
+    val matriculationId: Long? = null,
+
+    @field:JsonProperty("assessmentId")
+    val assessmentId: Long? = null
 )
 
