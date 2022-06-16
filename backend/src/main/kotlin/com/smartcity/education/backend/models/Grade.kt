@@ -17,13 +17,13 @@ data class Grade(
     @field:Id
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     @field:JsonProperty("id")
-    val id: Long? = null,
+    var id: Long? = null,
 
     @field:JsonProperty("grade", required = true)
-    val grade: Float,
+    var grade: Float,
 
     @field:JsonProperty("date", required = true)
-    val date: LocalDateTime,
+    var date: LocalDateTime,
 
     @field:ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @field:JsonIgnore

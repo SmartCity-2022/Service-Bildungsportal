@@ -1,6 +1,7 @@
 package com.smartcity.education.backend.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.LocalDateTime
 
 /**
  * Property collection for a grade
@@ -17,7 +18,7 @@ data class GradeProperties(
     val grade: Float? = null,
 
     @field:JsonProperty("date", required = true)
-    val date: String,
+    val date: LocalDateTime? = null,
 
     @field:JsonProperty("matriculationId")
     val matriculationId: Long? = null,
