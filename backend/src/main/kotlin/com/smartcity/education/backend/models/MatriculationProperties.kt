@@ -1,6 +1,7 @@
 package com.smartcity.education.backend.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.LocalDateTime
 
 /**
  * Property collection for a matriculation
@@ -20,6 +21,6 @@ data class MatriculationProperties(
     val educationId: Long? = null,
 
     @field:JsonProperty("date")
-    val date: String? = null
+    val date: LocalDateTime? = null
 )
 

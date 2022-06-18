@@ -17,10 +17,10 @@ data class Matriculation(
     @field:Id
     @field:GeneratedValue
     @field:JsonProperty("id")
-    val id: Long? = null,
+    var id: Long? = null,
 
     @field:JsonProperty("date", required = true)
-    val date: LocalDateTime,
+    var date: LocalDateTime,
 
     @field:ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @field:JsonIgnore
@@ -28,7 +28,15 @@ data class Matriculation(
 
     @field:ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @field:JsonIgnore
-    var student: Student? = null
+    var student: Student? = null,
+
+    @field:JsonIgnore
+    @field:OneToMany(mappedBy = "matriculation", cascade = [CascadeType.ALL])
+    val graduations: MutableList<Graduation> = ArrayList(),
+
+    @field:JsonIgnore
+    @field:OneToMany(mappedBy = "matriculation", cascade = [CascadeType.ALL])
+    val grades: MutableList<Grade> = ArrayList()
 ) {
     @get:JsonProperty("educationId")
     val educationId: Long? get() = education?.id
