@@ -16,7 +16,7 @@ RUN npm run build
 ## Create NGINX deployment
 FROM nginx:latest
 
-COPY --from=building-stage /app/dist /usr/share/nginx/html
+COPY --from=building-stage /app/build /usr/share/nginx/html
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
