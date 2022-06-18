@@ -1256,8 +1256,6 @@ components:
             - title
     GraduationProperties:
       type: "object"
-      required:
-        - date
       properties:
         id:
           type: "integer"
