@@ -5,6 +5,7 @@ import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.AssessmentProperties
 import com.smartcity.education.backend.models.Grade
 import com.smartcity.education.backend.repositories.AssessmentRepository
+import com.smartcity.education.backend.repositories.MatriculationRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,6 +24,7 @@ import kotlin.collections.List
 @RequestMapping("\${api.base-path:}")
 class AssessmentApiController(
         private val repository: AssessmentRepository,
+        private val matriculationRepository: MatriculationRepository,
         private val assigner: AssessmentAssigner,
         private val authUtil: AuthUtil
 ) {
@@ -68,6 +70,7 @@ class AssessmentApiController(
 
         return assessment?.let {
             if (authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), it.education?.location?.institutionId ?: -1)) {
+                grade.matriculation = matriculationRepository.findByIdOrNull(grade.matriculationId!!)
                 grade.assessment = it
                 it.grades.add(grade)
                 repository.save(it)
