@@ -5,6 +5,7 @@
 
 .education-card .card-header {
     background-color: var(--md-blue-500);
+    color: var(--md-white)
 }
 
 .education-card .card-body {
@@ -19,8 +20,21 @@
     background-color: var(--md-orange-300);
 }
 
+.assessment-card .card-header {
+    background-color: var(--md-deep-purple-500);
+    color: var(--md-white)
+}
+
+.assessment-card .card-body {
+    background-color: var(--md-deep-purple-300);
+}
 
 a, .card-header .card-title {
-    color: black;
+    color: inherit;
     text-decoration: none;
+}
+
+a:hover, .card-header .card-title {
+    color: inherit;
+    text-decoration: underline;
 }
