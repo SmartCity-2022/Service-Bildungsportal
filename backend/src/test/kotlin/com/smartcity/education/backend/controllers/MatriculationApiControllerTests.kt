@@ -3,6 +3,7 @@ package com.smartcity.education.backend.controllers
 import com.smartcity.education.backend.assigners.MatriculationAssigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.*
+import com.smartcity.education.backend.repositories.AssessmentRepository
 import com.smartcity.education.backend.repositories.MatriculationRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -19,6 +20,8 @@ import java.util.*
 class MatriculationApiControllerTests {
     @MockBean
     private val repository: MatriculationRepository? = null
+    @MockBean
+    private val assessmentRepository: AssessmentRepository? = null
     @MockBean
     private val assigner: MatriculationAssigner? = null
     @MockBean
@@ -138,6 +141,8 @@ class MatriculationApiControllerTests {
                 grade = 1.0f,
                 date = LocalDateTime.now()
         )
+        val assessmentId = 1L
+        grade.assessmentId = assessmentId
         val obj = Matriculation(
                 date = LocalDateTime.now()
         )
@@ -149,6 +154,7 @@ class MatriculationApiControllerTests {
         Assertions.assertEquals(result?.statusCode, HttpStatus.CREATED)
 
         verify(repository, times(1))?.findById(id)
+        verify(assessmentRepository, times(1))?.findById(assessmentId)
         verify(authUtil, times(1))?.hasInstitutionAuthority(SecurityContextHolder.getContext(), -1)
         verify(repository, times(1))?.save(obj)
     }
