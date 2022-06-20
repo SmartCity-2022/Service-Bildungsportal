@@ -41,6 +41,10 @@ export default class Header extends React.Component<Props, State> {
             links.push({href: Resources.assessmentOverview(), caption: 'Prüfungseinsicht'})
         }
 
+        if (this.state.me?.institution !== undefined) {
+            links.push({href: Resources.educationCreation(), caption: 'Bildungsangebot erstellen'})
+        }
+
         return <Navbar>
             <Navbar.Brand>Bildungsportal</Navbar.Brand>
             <Nav>

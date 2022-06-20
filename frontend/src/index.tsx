@@ -22,6 +22,7 @@ import axios from "axios";
 import {Toaster} from "react-hot-toast";
 import AssessmentOverview from "./AssessmentOverview";
 import Resources from "./Resources";
+import EducationCreation from "./EducationCreation";
 
 const getAccessToken = async () => {
     const cookieAccessToken = "accessToken"
@@ -61,6 +62,7 @@ root.render(
                 <Route path={Resources.educationDetails(':id')} element={<EducationDetails config={config}/>}/>
                 <Route path={Resources.institutionDetails(':id')} element={<InstitutionDetails config={config}/>}/>
                 <Route path={Resources.assessmentOverview()} element={<AssessmentOverview config={config}/>}/>
+                <Route path={Resources.educationCreation()} element={<EducationCreation config={config}/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

@@ -8,8 +8,33 @@
     color: var(--md-white)
 }
 
-.education-card .card-body {
+.education-card {
     background-color: var(--md-blue-300);
+}
+
+form .education-card * {
+    background-color: inherit;
+    color: inherit;
+    border: 0;
+}
+
+form .education-card *:focus {
+    background-color: inherit;
+    box-shadow: none;
+    border: 1px solid var(--md-black);
+}
+
+.education-card .btn-primary {
+    background-color: var(--md-blue-500);
+}
+
+.education-card .btn-primary:hover {
+    background-color: var(--md-blue-700);
+}
+
+.education-card textarea {
+    resize: none;
+    height: 200px;
 }
 
 .institution-card .card-header {
