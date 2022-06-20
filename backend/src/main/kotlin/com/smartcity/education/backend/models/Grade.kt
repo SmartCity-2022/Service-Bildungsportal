@@ -33,10 +33,14 @@ data class Grade(
     @field:JsonIgnore
     var assessment: Assessment? = null
 ) {
-    @get:JsonProperty("matriculationId")
-    val matriculationId: Long? get() = matriculation?.id
+    @Transient
+    @JsonProperty("matriculationId")
+    var matriculationId: Long? = null
+        get() = matriculation?.id ?: field
 
-    @get:JsonProperty("assessmentId")
-    val assessmentId: Long? get() = assessment?.id
+    @Transient
+    @JsonProperty("assessmentId")
+    var assessmentId: Long? = null
+        get() = assessment?.id ?: field
 }
 

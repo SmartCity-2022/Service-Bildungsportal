@@ -156,6 +156,12 @@ export interface Grade {
      * @type {number}
      * @memberof Grade
      */
+    'assessmentId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Grade
+     */
     'grade': number;
     /**
      * 
@@ -187,13 +193,19 @@ export interface GradeProperties {
      * @type {number}
      * @memberof GradeProperties
      */
-    'grade': number;
+    'assessmentId'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GradeProperties
+     */
+    'grade'?: number;
     /**
      * 
      * @type {string}
      * @memberof GradeProperties
      */
-    'date': string;
+    'date'?: string;
 }
 /**
  * 
@@ -243,7 +255,7 @@ export interface GraduationProperties {
      * @type {string}
      * @memberof GraduationProperties
      */
-    'date': string;
+    'date'?: string;
 }
 /**
  * 
