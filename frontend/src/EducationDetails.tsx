@@ -11,6 +11,7 @@ import {
 import {Button, Card} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import {toast} from "react-hot-toast";
+import Resources from "./Resources";
 
 interface Props {
     config: Configuration
@@ -133,7 +134,7 @@ class EducationDetails extends React.Component<PropsWithParams, State> {
     render() {
         return <Card className="education-card">
             <Card.Header>
-                <a href={`${process.env.PUBLIC_URL}/institution/${this.state.institution?.id}`}>{this.state.institution?.name}</a>
+                <a href={`${process.env.PUBLIC_URL}/${Resources.institutionDetails(this.state.institution?.id)}`}>{this.state.institution?.name}</a>
             </Card.Header>
             <Card.Body>
                 <Card.Title>{this.state.education?.title}</Card.Title>

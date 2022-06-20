@@ -2,13 +2,50 @@ import './Header.css'
 
 import {Nav, Navbar} from "react-bootstrap";
 import React from "react";
+import {Configuration, User, UserApi} from "./api";
+import Resources from "./Resources";
 
-export default function Header() {
-    return <Navbar>
-        <Navbar.Brand>Bildungsportal</Navbar.Brand>
-        <Nav>
-            <Nav.Link href={`${process.env.PUBLIC_URL}/`}>Bildungsangebote</Nav.Link>
-            <Nav.Link href={`${process.env.PUBLIC_URL}/assessment`}>Prüfungseinsicht</Nav.Link>
-        </Nav>
-    </Navbar>
+interface Props {
+    config: Configuration
+}
+
+interface State {
+    me: User | null
+}
+
+interface Link {
+    href: string,
+    caption: string
+}
+
+export default class Header extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state ={
+            me: null
+        }
+    }
+
+    async componentDidMount() {
+        const userApi = new UserApi(this.props.config)
+        this.setState({
+            me: await userApi.me().then((res) => res.data).catch((_) => null)
+        })
+    }
+
+    render() {
+        const links = new Array<Link>()
+        links.push({href: Resources.educationOverview(), caption: 'Bildungsangebote'})
+
+        if (this.state.me?.student !== undefined) {
+            links.push({href: Resources.assessmentOverview(), caption: 'Prüfungseinsicht'})
+        }
+
+        return <Navbar>
+            <Navbar.Brand>Bildungsportal</Navbar.Brand>
+            <Nav>
+                {links.map((l) => <Nav.Link href={`${process.env.PUBLIC_URL}/${l.href}`}>{l.caption}</Nav.Link>)}
+            </Nav>
+        </Navbar>
+    }
 }

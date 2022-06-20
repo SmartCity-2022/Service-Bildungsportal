@@ -21,6 +21,7 @@ import {Configuration} from "./api";
 import axios from "axios";
 import {Toaster} from "react-hot-toast";
 import AssessmentOverview from "./AssessmentOverview";
+import Resources from "./Resources";
 
 const getAccessToken = async () => {
     const cookieAccessToken = "accessToken"
@@ -53,13 +54,13 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <Toaster/>
-        <Header/>
+        <Header config={config}/>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Overview config={config}/>}/>
-                <Route path="/education/:id" element={<EducationDetails config={config}/>}/>
-                <Route path="/institution/:id" element={<InstitutionDetails config={config}/>}/>
-                <Route path="/assessment" element={<AssessmentOverview config={config}/>}/>
+                <Route path={Resources.educationOverview()} element={<Overview config={config}/>}/>
+                <Route path={Resources.educationDetails(':id')} element={<EducationDetails config={config}/>}/>
+                <Route path={Resources.institutionDetails(':id')} element={<InstitutionDetails config={config}/>}/>
+                <Route path={Resources.assessmentOverview()} element={<AssessmentOverview config={config}/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
