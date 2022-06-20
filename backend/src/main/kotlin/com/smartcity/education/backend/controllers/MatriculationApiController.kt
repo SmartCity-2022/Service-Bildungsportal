@@ -1,5 +1,6 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.Constants
 import com.smartcity.education.backend.assigners.MatriculationAssigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Grade
@@ -7,6 +8,7 @@ import com.smartcity.education.backend.models.Graduation
 import com.smartcity.education.backend.models.MatriculationProperties
 import com.smartcity.education.backend.repositories.AssessmentRepository
 import com.smartcity.education.backend.repositories.MatriculationRepository
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -27,7 +29,8 @@ class MatriculationApiController(
         private val repository: MatriculationRepository,
         private val assessmentRepository: AssessmentRepository,
         private val assigner: MatriculationAssigner,
-        private val authUtil: AuthUtil
+        private val authUtil: AuthUtil,
+        private val template: RabbitTemplate
 ) {
     @RequestMapping(
         method = [RequestMethod.GET],
@@ -124,7 +127,16 @@ class MatriculationApiController(
             if (authUtil.hasInstitutionAuthority(SecurityContextHolder.getContext(), it.education?.location?.institutionId ?: -1)) {
                 graduation.matriculation = it
                 it.graduations.add(graduation)
-                repository.save(it)
+                val created = repository.save(it)
+
+                created.graduations.last().id?.let { id ->
+                    template.convertAndSend(
+                            Constants.exchange,
+                            Constants.RoutingKeys.graduated,
+                            id.toString()
+                    )
+                }
+
 
                 ResponseEntity
                         .created(URI("/graduation/${graduation.id}"))
