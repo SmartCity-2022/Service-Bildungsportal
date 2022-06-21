@@ -1,5 +1,6 @@
 package com.smartcity.education.backend.controllers
 
+import com.smartcity.education.backend.Constants
 import com.smartcity.education.backend.assigners.EducationAssigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.*
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.*
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -30,6 +32,8 @@ class EducationApiControllerTests {
     private val authUtil: AuthUtil? = null
     @MockBean
     private val assigner: EducationAssigner? = null
+    @MockBean
+    private val template: RabbitTemplate? = null
     @Autowired
     private val sut: EducationApiController? = null
 
@@ -262,6 +266,7 @@ class EducationApiControllerTests {
         val studentId = 0L
 
         `when`(repository?.findById(id)).thenReturn(Optional.of(obj))
+        `when`(repository?.save(obj)).thenReturn(obj)
         `when`(authUtil?.hasStudentAuthority(SecurityContextHolder.getContext(), studentId)).thenReturn(true)
 
         val result = sut?.createMatriculationOfEducation(id, studentId)
