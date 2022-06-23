@@ -59,6 +59,7 @@ form .education-card *:focus {
     position: absolute;
     left: 4px;
     top: 4px;
+}
 
 .filter {
     display: flex;
