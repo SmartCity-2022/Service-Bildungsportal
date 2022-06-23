@@ -47,7 +47,7 @@ form .education-card *:focus {
 
 .assessment-card .card-header {
     background-color: var(--md-deep-purple-500);
-    color: var(--md-white)
+    color: var(--md-white);
 }
 
 .assessment-card .card-body {
@@ -59,6 +59,13 @@ form .education-card *:focus {
     position: absolute;
     left: 4px;
     top: 4px;
+
+.filter {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    margin: 30px auto;
+    gap: 30px;
 }
 
 a, .card-header .card-title {
