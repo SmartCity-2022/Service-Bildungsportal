@@ -6,7 +6,7 @@ import {
     Education,
     EducationApi,
     Grade,
-    GradeApi,
+    GradeApi, Graduation, GraduationApi,
     MatriculationApi
 } from "./api";
 
@@ -15,7 +15,8 @@ import AssessmentList from "./AssessmentList";
 interface Element {
     education: Education,
     assessments: Array<Assessment>
-    grades: Map<number, Grade>
+    grades: Map<number, Grade>,
+    graduation: Graduation | null,
 }
 
 interface Props {
@@ -37,6 +38,7 @@ export default class AssessmentOverview extends React.Component<Props, State> {
         const educationApi = new EducationApi(this.props.config)
         const matriculationApi = new MatriculationApi(this.props.config)
         const gradeApi = new GradeApi(this.props.config)
+        const graduationApi = new GraduationApi(this.props.config)
         const assessmentApi = new AssessmentApi(this.props.config)
 
         const elements = await matriculationApi.myMatriculations()
@@ -48,7 +50,8 @@ export default class AssessmentOverview extends React.Component<Props, State> {
                         assessments: await assessmentApi.allAssessmentsOfEducation(m.educationId!)
                             .then((res) => res.data),
                         grades: await gradeApi.allGradesOfMatriculation(m.id!)
-                            .then((res) => new Map(res.data.map((g) => [g.assessmentId!, g])))
+                            .then((res) => new Map(res.data.map((g) => [g.assessmentId!, g]))),
+                        graduation: await graduationApi.allGraduationsOfMatriculation(m.id!).then(res => res.data[0])
                     }
                 })
             ))
