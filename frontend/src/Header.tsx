@@ -37,12 +37,16 @@ export default class Header extends React.Component<Props, State> {
         const links = new Array<Link>()
         links.push({href: Resources.educationOverview(), caption: 'Bildungsangebote'})
 
-        if (this.state.me?.student !== undefined) {
-            links.push({href: Resources.assessmentOverview(), caption: 'Prüfungseinsicht'})
-        }
+        if (this.state.me) {
+            if (this.state.me.student) {
+                links.push({href: Resources.assessmentOverview(), caption: 'Prüfungseinsicht'})
+            } else {
+                links.push({href: Resources.registerStudent(), caption: 'Registrierung'})
+            }
 
-        if (this.state.me?.institution !== undefined) {
-            links.push({href: Resources.educationCreation(), caption: 'Bildungsangebot erstellen'})
+            if (this.state.me.institution) {
+                links.push({href: Resources.educationCreation(), caption: 'Bildungsangebot erstellen'})
+            }
         }
 
         return <Navbar>

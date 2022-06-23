@@ -79,9 +79,12 @@ class EducationDetails extends React.Component<PropsWithParams, State> {
             .then((response) => response.data)
             .catch((reason) => null)
 
-        const matriculations = await this.matriculationApi
-            .myMatriculations()
-            .then((res) => res.data)
+        let matriculations: Array<Matriculation> = []
+        if (me?.student) {
+            matriculations = await this.matriculationApi
+                .myMatriculations()
+                .then((res) => res.data)
+        }
 
         this.setState({
             institution: institution,

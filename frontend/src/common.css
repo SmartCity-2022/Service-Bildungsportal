@@ -12,24 +12,26 @@
     background-color: var(--md-blue-300);
 }
 
-form .education-card * {
+form .card * {
     background-color: inherit;
     color: inherit;
     border: 0;
 }
 
-form .education-card *:focus {
+form .card *:focus {
     background-color: inherit;
     box-shadow: none;
     border: 1px solid var(--md-black);
 }
 
-.education-card .btn-primary {
+.card .btn-primary {
     background-color: var(--md-blue-500);
+    color: var(--md-white);
 }
 
-.education-card .btn-primary:hover {
+.card .btn-primary:hover {
     background-color: var(--md-blue-700);
+    color: var(--md-white);
 }
 
 .education-card textarea {
@@ -52,6 +54,15 @@ form .education-card *:focus {
 
 .assessment-card .card-body {
     background-color: var(--md-deep-purple-300);
+}
+
+.register-card .card-header {
+    background-color: var(--md-green-500);
+    color: var(--md-white)
+}
+
+.register-card {
+    background-color: var(--md-green-300);
 }
 
 a, .card-header .card-title {
