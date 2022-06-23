@@ -2,15 +2,17 @@ import React from "react";
 import {
     Assessment,
     Education,
-    Grade
+    Grade, Graduation
 } from "./api";
 
 import {Card, Table} from "react-bootstrap";
+import {CheckmarkIcon} from "react-hot-toast";
 
 interface Element {
     education: Education,
     assessments: Array<Assessment>
     grades: Map<number, Grade>
+    graduation: Graduation | null
 }
 
 interface Props {
@@ -32,6 +34,7 @@ export default class AssessmentList extends React.Component<Props, State> {
         return <Card className="assessment-card">
             <Card.Header>
                 <a href={`${process.env.PUBLIC_URL}/education/${this.state.element.education.id}`}>{this.state.element.education.title}</a>
+                { this.state.element.graduation && <CheckmarkIcon className="checkmark"/> }
             </Card.Header>
             <Card.Body>
                 <Table >
