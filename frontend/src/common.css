@@ -54,6 +54,13 @@ form .education-card *:focus {
     background-color: var(--md-deep-purple-300);
 }
 
+.checkmark {
+    display: inline-block;
+    position: absolute;
+    left: 4px;
+    top: 4px;
+}
+
 a, .card-header .card-title {
     color: inherit;
     text-decoration: none;
