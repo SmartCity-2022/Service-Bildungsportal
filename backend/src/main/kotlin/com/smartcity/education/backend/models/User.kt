@@ -38,7 +38,7 @@ data class User(
 
     @JsonIgnore
     override fun getUsername(): String {
-        return email!!
+        return email
     }
 
     @JsonIgnore
