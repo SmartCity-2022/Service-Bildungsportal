@@ -5,6 +5,7 @@ import {Button, Card, Form} from "react-bootstrap";
 import {toast} from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
 import {NavigateFunction} from "react-router/lib/hooks";
+import {delay} from "./Util";
 
 interface Props {
     config: Configuration
@@ -17,10 +18,6 @@ interface State {
     location: Location | null
     title: string,
     description: string
-}
-
-function delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 class EducationCreation extends React.Component<Props, State> {
@@ -36,8 +33,6 @@ class EducationCreation extends React.Component<Props, State> {
     }
 
     async componentDidMount() {
-        const a: [number, string] = [1, 'a']
-
         const userApi = new UserApi(this.props.config)
         const locationApi = new LocationApi(this.props.config)
 

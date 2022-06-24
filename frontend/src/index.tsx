@@ -23,6 +23,7 @@ import {Toaster} from "react-hot-toast";
 import AssessmentOverview from "./AssessmentOverview";
 import Resources from "./Resources";
 import EducationCreation from "./EducationCreation";
+import RegisterStudent from "./RegisterStudent";
 
 const getAccessToken = async () => {
     const cookieAccessToken = "accessToken"
@@ -63,6 +64,7 @@ root.render(
                 <Route path={Resources.institutionDetails(':id')} element={<InstitutionDetails config={config}/>}/>
                 <Route path={Resources.assessmentOverview()} element={<AssessmentOverview config={config}/>}/>
                 <Route path={Resources.educationCreation()} element={<EducationCreation config={config}/>}/>
+                <Route path={Resources.registerStudent()} element={<RegisterStudent config={config}/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
