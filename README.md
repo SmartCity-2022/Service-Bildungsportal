@@ -22,19 +22,20 @@ Anschließend kann im Ordner `backend` das Backend folgendermaßen gebuildet, Un
 
 ## Umgebungsvariablen
 
-| Variable           | Beschreibung                         |
-|:-------------------|:-------------------------------------|
-| DATABASE\_HOST     | Hostname oder IP des MySQL Servers   |
-| DATABASE\_PORT     | Port des MySQL Servers               |
-| DATABASE           | Name der Datenbank-Instanz           |
-| DATABASE\_USER     | Benutzername                         |
-| DATABASE\_PASSWORD | Passwort des Benutzers               |
-| RABBITMQ\_HOST     | Hostname des RabbitMQ Servers        |
-| RABBITMQ\_PORT     | Port des RabbitMQ Servers            |
-| RABBITMQ\_USER     | Benutzername auf dem RabbitMQ Server |
-| RABBITMQ\_PASSWORD | Passwort des Benutzers               |
-| RABBITMQ\_EXCHANGE | Name des Topic Exchanges             |
-| MAINHUB            | Base-URL der MainHub-API             |
+| Variable           | Beschreibung                                                  |
+|:-------------------|:--------------------------------------------------------------|
+| DATABASE\_HOST     | Hostname oder IP des MySQL Servers                            |
+| DATABASE\_PORT     | Port des MySQL Servers                                        |
+| DATABASE           | Name der Datenbank-Instanz                                    |
+| DATABASE\_USER     | Benutzername                                                  |
+| DATABASE\_PASSWORD | Passwort des Benutzers                                        |
+| RABBITMQ\_HOST     | Hostname des RabbitMQ Servers                                 |
+| RABBITMQ\_PORT     | Port des RabbitMQ Servers                                     |
+| RABBITMQ\_USER     | Benutzername auf dem RabbitMQ Server                          |
+| RABBITMQ\_PASSWORD | Passwort des Benutzers                                        |
+| RABBITMQ\_EXCHANGE | Name des Topic Exchanges                                      |
+| MAINHUB            | Base-URL der MainHub-API                                      |
+| JWT_SECRET         | Secret des JWT-Tokens (nur benötigt in den Integrationstests) |
 
 # Frontend
 
@@ -69,7 +70,7 @@ Zur Laufzeit wird das Frontend und das Backend benötigt.
 ## Starten
 
 Zunächst müssen die Umgebungsvariablen (siehe unten) gesetzt werden. 
-Anschließend kann im Ordner `test/cypress` die Integrationstests folgendermaßen gestartet werden:
+Anschließend kann im Ordner `frontend` die Integrationstests folgendermaßen gestartet werden:
 ```
 npm run cypress:run
 ```

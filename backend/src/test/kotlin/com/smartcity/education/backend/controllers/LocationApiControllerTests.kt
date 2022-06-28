@@ -1,17 +1,16 @@
 package com.smartcity.education.backend.controllers
 
 import com.smartcity.education.backend.Constants
+import com.smartcity.education.backend.MessageSender
 import com.smartcity.education.backend.assigners.LocationAssigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Education
-import com.smartcity.education.backend.models.InstitutionProperties
 import com.smartcity.education.backend.models.Location
 import com.smartcity.education.backend.models.LocationProperties
 import com.smartcity.education.backend.repositories.LocationRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
-import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -28,7 +27,7 @@ class LocationApiControllerTests {
     private val assigner: LocationAssigner? = null
 
     @MockBean
-    private val template: RabbitTemplate? = null
+    private val sender: MessageSender? = null
 
     @MockBean
     private val authUtil: AuthUtil? = null
@@ -111,8 +110,7 @@ class LocationApiControllerTests {
 
         verify(repository, times(1))?.findById(id)
         verify(repository, times(1))?.save(obj)
-        verify(template, times(1))?.convertAndSend(
-            Constants.exchange,
+        verify(sender, times(1))?.send(
             Constants.RoutingKeys.created,
             educationId.toString()
         )
@@ -142,8 +140,7 @@ class LocationApiControllerTests {
 
         verify(repository, times(1))?.findById(id)
         verify(repository, never())?.save(obj)
-        verify(template, never())?.convertAndSend(
-                Constants.exchange,
+        verify(sender, never())?.send(
                 Constants.RoutingKeys.created,
                 educationId.toString()
         )

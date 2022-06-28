@@ -48,3 +48,13 @@ allOpen {
 	annotation("javax.persistence.MappedSuperclass")
 	annotation("javax.persistence.Embeddable")
 }
+
+if (project.hasProperty("isIntegrationTest")) {
+	tasks.withType<KotlinCompile> {
+		exclude("com/smartcity/education/backend/RabbitMqConfig.kt")
+	}
+} else {
+	tasks.withType<KotlinCompile> {
+		exclude("com/smartcity/education/backend/TestJwtConfig.kt")
+	}
+}

@@ -1,6 +1,7 @@
 package com.smartcity.education.backend.controllers
 
 import com.smartcity.education.backend.Constants
+import com.smartcity.education.backend.MessageSender
 import com.smartcity.education.backend.assigners.Assigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Assessment
@@ -10,7 +11,6 @@ import com.smartcity.education.backend.models.Matriculation
 import com.smartcity.education.backend.repositories.EducationRepository
 import com.smartcity.education.backend.repositories.QualificationRepository
 import com.smartcity.education.backend.repositories.StudentRepository
-import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -30,7 +30,7 @@ class EducationApiController(
         private val studentRepository: StudentRepository,
         private val assigner: Assigner<EducationProperties, Education>,
         private val authUtil: AuthUtil,
-        private val template: RabbitTemplate
+        private val sender: MessageSender
 ) {
 
     @RequestMapping(
@@ -183,8 +183,7 @@ class EducationApiController(
             val created = repository.save(it)
 
             created.matriculations.last().id?.let { id ->
-                template.convertAndSend(
-                        Constants.exchange,
+                sender.send(
                         Constants.RoutingKeys.matriculated,
                         id.toString()
                 )

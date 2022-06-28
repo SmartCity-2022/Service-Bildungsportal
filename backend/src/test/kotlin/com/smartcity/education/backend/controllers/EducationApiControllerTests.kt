@@ -1,6 +1,6 @@
 package com.smartcity.education.backend.controllers
 
-import com.smartcity.education.backend.Constants
+import com.smartcity.education.backend.MessageSender
 import com.smartcity.education.backend.assigners.EducationAssigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.*
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -33,7 +32,7 @@ class EducationApiControllerTests {
     @MockBean
     private val assigner: EducationAssigner? = null
     @MockBean
-    private val template: RabbitTemplate? = null
+    private val sender: MessageSender? = null
     @Autowired
     private val sut: EducationApiController? = null
 
