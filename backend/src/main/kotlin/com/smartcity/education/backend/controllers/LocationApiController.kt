@@ -1,13 +1,13 @@
 package com.smartcity.education.backend.controllers
 
 import com.smartcity.education.backend.Constants
+import com.smartcity.education.backend.MessageSender
 import com.smartcity.education.backend.assigners.LocationAssigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Education
 import com.smartcity.education.backend.models.Location
 import com.smartcity.education.backend.models.LocationProperties
 import com.smartcity.education.backend.repositories.LocationRepository
-import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,7 +23,7 @@ import javax.validation.Valid
 class LocationApiController(
         private val repository: LocationRepository,
         private val assigner: LocationAssigner,
-        private val template: RabbitTemplate,
+        private val sender: MessageSender,
         private val authUtil: AuthUtil
 ) {
     @RequestMapping(
@@ -68,8 +68,7 @@ class LocationApiController(
             val created = repository.save(it)
 
             created.educations.last().id?.let { id ->
-                template.convertAndSend(
-                        Constants.exchange,
+                sender.send(
                         Constants.RoutingKeys.created,
                         id.toString()
                 )

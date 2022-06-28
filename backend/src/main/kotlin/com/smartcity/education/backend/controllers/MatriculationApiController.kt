@@ -1,6 +1,7 @@
 package com.smartcity.education.backend.controllers
 
 import com.smartcity.education.backend.Constants
+import com.smartcity.education.backend.MessageSender
 import com.smartcity.education.backend.assigners.MatriculationAssigner
 import com.smartcity.education.backend.authentication.AuthUtil
 import com.smartcity.education.backend.models.Grade
@@ -8,19 +9,13 @@ import com.smartcity.education.backend.models.Graduation
 import com.smartcity.education.backend.models.MatriculationProperties
 import com.smartcity.education.backend.repositories.AssessmentRepository
 import com.smartcity.education.backend.repositories.MatriculationRepository
-import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
-
-import org.springframework.web.bind.annotation.*
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 import java.net.URI
-
 import javax.validation.Valid
-
-import kotlin.collections.List
 
 @RestController
 @Validated
@@ -30,7 +25,7 @@ class MatriculationApiController(
         private val assessmentRepository: AssessmentRepository,
         private val assigner: MatriculationAssigner,
         private val authUtil: AuthUtil,
-        private val template: RabbitTemplate
+        private val sender: MessageSender
 ) {
     @RequestMapping(
         method = [RequestMethod.GET],
@@ -130,8 +125,7 @@ class MatriculationApiController(
                 val created = repository.save(it)
 
                 created.graduations.last().id?.let { id ->
-                    template.convertAndSend(
-                            Constants.exchange,
+                    sender.send(
                             Constants.RoutingKeys.graduated,
                             id.toString()
                     )

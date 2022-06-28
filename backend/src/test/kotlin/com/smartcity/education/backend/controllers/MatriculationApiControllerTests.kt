@@ -1,15 +1,17 @@
 package com.smartcity.education.backend.controllers
 
-import com.smartcity.education.backend.Constants
+import com.smartcity.education.backend.MessageSender
 import com.smartcity.education.backend.assigners.MatriculationAssigner
 import com.smartcity.education.backend.authentication.AuthUtil
-import com.smartcity.education.backend.models.*
+import com.smartcity.education.backend.models.Grade
+import com.smartcity.education.backend.models.Graduation
+import com.smartcity.education.backend.models.Matriculation
+import com.smartcity.education.backend.models.MatriculationProperties
 import com.smartcity.education.backend.repositories.AssessmentRepository
 import com.smartcity.education.backend.repositories.MatriculationRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
-import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -29,7 +31,7 @@ class MatriculationApiControllerTests {
     @MockBean
     private val authUtil: AuthUtil? = null
     @MockBean
-    private val template: RabbitTemplate? = null
+    private val sender: MessageSender? = null
     @Autowired
     private val sut: MatriculationApiController? = null
 

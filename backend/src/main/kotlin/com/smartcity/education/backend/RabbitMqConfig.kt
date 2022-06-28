@@ -49,10 +49,16 @@ class RabbitMqConfig {
     }
 
     @Bean
-    fun sendHello(template: RabbitTemplate): ApplicationRunner {
+    fun messageSender(template: RabbitTemplate): MessageSender {
+        return MessageSender { routingKey, payload ->
+            template.convertAndSend(Constants.exchange, routingKey, payload)
+        }
+    }
+
+    @Bean
+    fun sendHello(sender: MessageSender): ApplicationRunner {
         return ApplicationRunner {
-            template.convertAndSend(
-                    Constants.exchange,
+            sender.send(
                     Constants.RoutingKeys.hello,
                     "Bildungsportal"
             )
