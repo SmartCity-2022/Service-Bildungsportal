@@ -70,7 +70,7 @@ Zur Laufzeit wird das Frontend und das Backend benötigt.
 ## Starten
 
 Zunächst müssen die Umgebungsvariablen (siehe unten) gesetzt werden. 
-Anschließend kann im Ordner `test/cypress` die Integrationstests folgendermaßen gestartet werden:
+Anschließend kann im Ordner `frontend` die Integrationstests folgendermaßen gestartet werden:
 ```
 npm run cypress:run
 ```
