@@ -22,19 +22,20 @@ Anschließend kann im Ordner `backend` das Backend folgendermaßen gebuildet, Un
 
 ## Umgebungsvariablen
 
-| Variable           | Beschreibung                         |
-|:-------------------|:-------------------------------------|
-| DATABASE\_HOST     | Hostname oder IP des MySQL Servers   |
-| DATABASE\_PORT     | Port des MySQL Servers               |
-| DATABASE           | Name der Datenbank-Instanz           |
-| DATABASE\_USER     | Benutzername                         |
-| DATABASE\_PASSWORD | Passwort des Benutzers               |
-| RABBITMQ\_HOST     | Hostname des RabbitMQ Servers        |
-| RABBITMQ\_PORT     | Port des RabbitMQ Servers            |
-| RABBITMQ\_USER     | Benutzername auf dem RabbitMQ Server |
-| RABBITMQ\_PASSWORD | Passwort des Benutzers               |
-| RABBITMQ\_EXCHANGE | Name des Topic Exchanges             |
-| MAINHUB            | Base-URL der MainHub-API             |
+| Variable           | Beschreibung                                                  |
+|:-------------------|:--------------------------------------------------------------|
+| DATABASE\_HOST     | Hostname oder IP des MySQL Servers                            |
+| DATABASE\_PORT     | Port des MySQL Servers                                        |
+| DATABASE           | Name der Datenbank-Instanz                                    |
+| DATABASE\_USER     | Benutzername                                                  |
+| DATABASE\_PASSWORD | Passwort des Benutzers                                        |
+| RABBITMQ\_HOST     | Hostname des RabbitMQ Servers                                 |
+| RABBITMQ\_PORT     | Port des RabbitMQ Servers                                     |
+| RABBITMQ\_USER     | Benutzername auf dem RabbitMQ Server                          |
+| RABBITMQ\_PASSWORD | Passwort des Benutzers                                        |
+| RABBITMQ\_EXCHANGE | Name des Topic Exchanges                                      |
+| MAINHUB            | Base-URL der MainHub-API                                      |
+| JWT_SECRET         | Secret des JWT-Tokens (nur benötigt in den Integrationstests) |
 
 # Frontend
 
